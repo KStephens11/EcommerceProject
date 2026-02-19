@@ -1,0 +1,8 @@
+app:
+  bootstrap:
+    admin:
+      username: admin
+      password: admin
+    customer:
+      username: customer
+      password: customer
