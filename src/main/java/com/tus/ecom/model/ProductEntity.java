@@ -1,17 +1,39 @@
 package com.tus.ecom.model;
 
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "products")
 public class ProductEntity {
 
-    private String id;
-    private String name;
-    private String description;
-    private String category;
-    private String brand;
-    private String image;
-    private double price;
-    private int quantity;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public ProductEntity(String id, String name, String description, String category, String brand, String image, double price, int quantity) {
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(length = 500)
+    private String description;
+
+    @Column
+    private String category;
+
+    @Column
+    private String brand;
+
+    @Column
+    private String image;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column
+    private Integer quantity;
+
+    public ProductEntity(Long id, String name, String description, String category, String brand, String image, BigDecimal price, Integer quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -24,11 +46,11 @@ public class ProductEntity {
 
     public ProductEntity(){}
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -72,19 +94,19 @@ public class ProductEntity {
         this.image = image;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
