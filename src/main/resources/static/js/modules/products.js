@@ -1,5 +1,3 @@
-// js/modules/products.js
-
 export class Products {
 
     constructor() {
