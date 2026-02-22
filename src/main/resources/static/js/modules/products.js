@@ -18,7 +18,41 @@ export class Products {
             if (!product) return;
 
             this.showModal(product);
+
         });
+
+        $("#searchForm").submit((e) => {
+            e.preventDefault();
+
+            const searchInput = $("#searchInput").val().trim();
+
+            if (!searchInput) {
+                this.loadProducts();
+                return;
+            }
+
+            $.ajax({
+                url: "/api/products/name",
+                method: "GET",
+                dataType: "json",
+                data: {
+                    name: searchInput,
+                    page: 0,
+                    size: 10
+                },
+                success: (products) => {
+
+                    this.renderProducts(products.content);
+
+                },
+                error: (xhr, status, error) => {
+                    console.error("Error:", error);
+                }
+
+            });
+
+        })
+
     }
 
     loadProducts() {
@@ -26,25 +60,16 @@ export class Products {
             url: '/api/products',
             method: 'GET',
             dataType: 'json',
+            data: { page: 0, size: 10 },
 
             success: (products) => {
 
                 this.allProducts = products;
 
-                $('#loading').hide();
-
-                if (!products || products.length === 0) {
-                    $('#products').html(
-                        '<p class="text-center text-muted">No products found.</p>'
-                    );
-                    return;
-                }
-
-                this.renderProducts(products);
+                this.renderProducts(products.content);
             },
 
             error: (xhr, status, error) => {
-                $('#loading').hide();
                 $('#error')
                     .text('Failed to load products: ' + error)
                     .show();
@@ -58,9 +83,15 @@ export class Products {
         const container = $('#products');
         container.empty();
 
-        products.forEach(product => {
+        if (!products || products.length === 0) {
+            container.html(
+                '<p class="text-center text-muted">No products found.</p>'
+            );
+        }
+        else {
+            products.forEach(product => {
 
-            const card = `
+                const card = `
                 <div class="col-md-4 mb-4 product-card clickable"
                      data-id="${product.id}"
                      role="button" tabindex="0">
@@ -78,8 +109,10 @@ export class Products {
                 </div>
             `;
 
-            container.append(card);
-        });
+                container.append(card);
+            });
+        }
+
     }
 
     showModal(product) {

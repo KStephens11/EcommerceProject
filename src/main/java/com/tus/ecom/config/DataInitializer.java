@@ -63,19 +63,13 @@ public class DataInitializer implements CommandLineRunner {
                 new ProductEntity(null, "Coffee Maker", "Automatic drip coffee machine", "Home", "Ninja", "images/coffeemaker.png", new BigDecimal("79.99"), 22)
         );
 
-        for (ProductEntity product : products) {
-            createProductIfNotExists(product);
+        if (productRepository.count() == 0) {
+            productRepository.saveAll(products);
         }
 
 
     }
 
-    private void createProductIfNotExists(ProductEntity product) {
-        Long productId = product.getId();
-        if (productRepository.findProductEntitiesById(productId).isEmpty()) {
-            productRepository.save(product);
-        }
-    }
 
     private void createUserIfMissing(String username, String rawPassword, RoleEntity role) {
         if (userRepository.findByUsername(username).isEmpty()) {

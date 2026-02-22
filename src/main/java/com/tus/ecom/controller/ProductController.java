@@ -2,6 +2,7 @@ package com.tus.ecom.controller;
 
 import com.tus.ecom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,8 +11,6 @@ import com.tus.ecom.model.ProductEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -25,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductEntity>> getAllProducts(Pageable pageable) {
+    public ResponseEntity<Page<ProductEntity>> getProducts(Pageable pageable) {
         return ResponseEntity.ok(productService.getAllProducts(pageable));
     }
 
@@ -50,4 +49,19 @@ public class ProductController {
         ProductEntity product = productService.getProductById(id);
         return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/name")
+    public ResponseEntity<Page<ProductEntity>> searchProducts(@RequestParam(required = false) String name, Pageable pageable) {
+
+        Page<ProductEntity> result;
+
+        if (name == null || name.isBlank()) {
+            result = productService.getAllProducts(pageable);
+        } else {
+            result = productService.getProductsByName(name, pageable);
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
 }
