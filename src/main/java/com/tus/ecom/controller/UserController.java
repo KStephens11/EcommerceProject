@@ -35,23 +35,11 @@ public class UserController {
 		return this.userService.getUsersById(id);
 	}
 
-    @PostMapping
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse createUser(@RequestBody UserRequest req) {
+    public UserResponse registerUser(@RequestBody UserRequest req) {
         return this.userService.createUser(req);
     }
-
-	@PutMapping
-	@ResponseStatus(HttpStatus.OK)
-	public UserResponse updateUser(@RequestBody UserRequest req) {
-		return this.userService.updateUser(req);
-	}
-
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteUser(@PathVariable Integer id) {
-		this.userService.deleteUser(id);
-	}
 
 	@GetMapping("/me")
 	public Map<String, Object> getLoggedinUser(Authentication authentication){
