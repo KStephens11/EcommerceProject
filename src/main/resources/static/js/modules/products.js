@@ -64,7 +64,7 @@ export class Products {
 
             success: (products) => {
 
-                this.allProducts = products;
+                this.allProducts = products.content;
 
                 this.renderProducts(products.content);
             },

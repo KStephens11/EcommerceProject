@@ -1,23 +1,45 @@
 export class Navbar {
 
-    constructor() {
-        this.init();
+    constructor(userData, productsInstance) {
+        this.userData = userData;
+        this.products = productsInstance;
     }
 
     init() {
-        this.bindevents();
+        this.showButton();
         this.setUsername();
+        this.bindEvents();
     }
 
-    bindevents() {
+    showButton() {
+        if (this.userData.roles.includes("ROLE_ADMIN")) {
+            $("#productManagementBtn").show();
+        }
+    }
+
+    bindEvents() {
+
+        if (this.userData.roles.includes("ROLE_ADMIN")) {
+
+            $("#productManagementBtn").click(() => {
+                $("#management-section").show();
+                $("#products-section").hide();
+            });
+
+        }
+
+        $("#homeBtn").click(() => {
+            $("#management-section").hide();
+            $("#products-section").show();
+
+            this.products.loadProducts();   // 🔥 now works
+        });
 
     }
 
     setUsername() {
-        $.get("/api/users/me", function(username) {
-            $("#usernameDisplay").text(username);
-        });
+        if (this.userData?.username) {
+            $("#usernameDisplay").text(this.userData.username);
+        }
     }
-
-
 }

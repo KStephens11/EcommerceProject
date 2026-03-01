@@ -5,9 +5,12 @@ import com.tus.ecom.dto.UserResponse;
 import com.tus.ecom.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -51,8 +54,18 @@ public class UserController {
 	}
 
 	@GetMapping("/me")
-	public String getLoggedinUser(Authentication authentication){
-		return authentication.getName();
+	public Map<String, Object> getLoggedinUser(Authentication authentication){
+
+		Map<String, Object> response = new HashMap<>();
+
+		response.put("username", authentication.getName());
+		response.put("roles",
+				authentication.getAuthorities()
+						.stream()
+						.map(GrantedAuthority::getAuthority)
+						.toList());
+
+		return response;
 	}
 	
 }
