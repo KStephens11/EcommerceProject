@@ -11,6 +11,13 @@ import com.tus.ecom.model.ProductEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
@@ -66,6 +73,23 @@ public class ProductController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/upload-image")
+    public ResponseEntity<String> uploadImage(
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+
+        String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/uploads/products/";
+
+        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+        Path path = Paths.get(uploadDir + filename);
+
+        Files.createDirectories(path.getParent());
+        Files.write(path, file.getBytes());
+
+        return ResponseEntity.ok("/uploads/products/" + filename);
     }
 
 }

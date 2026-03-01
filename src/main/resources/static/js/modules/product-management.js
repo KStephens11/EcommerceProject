@@ -133,6 +133,32 @@ export class ProductManagement {
 
     saveProduct() {
 
+        const file = $("#productImageFile")[0].files[0];
+
+        if (!file) {
+            this.submitProduct(null);
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        $.ajax({
+            url: "/api/products/upload-image",
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: (imagePath) => {
+                this.submitProduct(imagePath);
+            }
+        });
+
+    }
+
+    submitProduct(imagePath) {
+
         const product = {
             id: $("#productId").val() || null,
             name: $("#productName").val(),
@@ -140,7 +166,7 @@ export class ProductManagement {
             category: $("#productCategory").val(),
             price: parseFloat($("#productPrice").val()),
             quantity: parseInt($("#productStock").val()),
-            image: $("#productImage").val()
+            image: imagePath
         };
 
         const method = product.id ? "PUT" : "POST";
@@ -156,9 +182,6 @@ export class ProductManagement {
             success: () => {
                 this.closeModal("productFormModal");
                 this.loadProducts();
-            },
-            error: (xhr) => {
-                console.error(xhr);
             }
         });
     }
