@@ -39,8 +39,16 @@ export class Navbar {
                 this.orders.loadStats();
                 this.orders.loadOrders();
             })
-
         }
+
+        $("#logout").click( () => {
+
+            $.post("/api/auth/logout", function () {
+                window.location.href = "/login";
+            });
+
+        });
+
 
         $("#homeBtn").click(() => {
             $("#management-section").hide();

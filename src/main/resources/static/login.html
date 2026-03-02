@@ -4,58 +4,79 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <style>
-    body {
-      background-color: #f8f9fa;
-      padding: 40px;
-    }
-
-    .login-box {
-      max-width: 400px;
-      margin: auto;
-    }
+    body { background-color: #f8f9fa; padding: 40px; }
+    .login-box { max-width: 400px; margin: auto; }
   </style>
-
 </head>
-
 <body>
-
 <div class="login-box card shadow p-4">
-
   <h3 class="text-center mb-4">Sign In</h3>
 
-  <form method="post" action="/login">
-
+  <form id="loginForm">
     <div class="mb-3">
       <label class="form-label">Username</label>
-      <input type="text" class="form-control" name="username" required autofocus>
+      <input type="text" class="form-control" id="loginUsername" required autofocus>
     </div>
-
     <div class="mb-3">
       <label class="form-label">Password</label>
-      <input type="password" class="form-control" name="password" required>
+      <input type="password" class="form-control" id="loginPassword" required>
     </div>
-
-    <button type="submit" class="btn btn-primary w-100">
-      Login
-    </button>
-
+    <button type="submit" class="btn btn-primary w-100">Login</button>
   </form>
 
-  <!-- Register link section (better UX placement) -->
-  <div class="text-center mt-3">
-    <small>
-      Don't have an account?
-      <a href="/register" class="text-success fw-bold">Register here</a>
-    </small>
+  <div class="alert alert-danger mt-3 d-none" id="errorBox">
+    <strong>Error:</strong> <span id="errorText"></span>
   </div>
 
+  <div class="text-center mt-3">
+    <small>Don't have an account? <a href="/register" class="text-success fw-bold">Register here</a></small>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery-4.0.0.min.js"></script>
 
+<script>
+
+  $("#loginForm").on("submit", (e) => {
+    loginUser(e);
+  });
+
+  function loginUser(event) {
+    event.preventDefault();
+    $("#errorBox").addClass("d-none");
+
+    const user = {
+      username: $("#loginUsername").val().trim(),
+      password: $("#loginPassword").val()
+    };
+
+    $.ajax({
+      url: "/api/auth/login",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(user),
+      xhrFields: {
+        withCredentials: true
+      },
+      // Move to index.html
+      success: function () {
+        window.location.href = "/";
+      },
+      error: function (xhr) {
+        let message = "Login failed. Check credentials.";
+        try {
+          message = JSON.parse(xhr.responseText).message || message;
+        } catch (e) {
+        }
+        $("#errorText").text(message);
+        $("#errorBox").removeClass("d-none");
+      }
+    });
+  }
+
+</script>
 </body>
 </html>

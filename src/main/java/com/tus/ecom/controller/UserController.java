@@ -4,6 +4,7 @@ import com.tus.ecom.dto.user.UserRequest;
 import com.tus.ecom.dto.user.UserResponse;
 import com.tus.ecom.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +36,26 @@ public class UserController {
 		return this.userService.getUsersById(id);
 	}
 
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse registerUser(@RequestBody UserRequest req) {
-        return this.userService.createUser(req);
-    }
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@RequestBody UserRequest req) {
+
+		try {
+			UserResponse response = userService.createUser(req);
+			return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		}
+		catch (RuntimeException ex) {
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body(Map.of("message", ex.getMessage()));
+		}
+	}
 
 	@GetMapping("/me")
 	public Map<String, Object> getLoggedinUser(Authentication authentication){
+
+		if (authentication == null) {
+			return Map.of("error", "Not authenticated");
+		}
 
 		Map<String, Object> response = new HashMap<>();
 
