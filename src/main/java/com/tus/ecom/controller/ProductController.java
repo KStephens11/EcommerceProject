@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -90,6 +91,11 @@ public class ProductController {
         Files.write(path, file.getBytes());
 
         return ResponseEntity.ok("/uploads/products/" + filename);
+    }
+
+    @GetMapping("/low-stock")
+    public List<ProductEntity> getLowStock(@RequestParam(defaultValue = "5") int threshold) {
+        return productService.getLowStockProducts(threshold);
     }
 
 }

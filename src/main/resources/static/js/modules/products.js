@@ -21,6 +21,34 @@ export class Products {
 
         });
 
+        $(document).on('click', '#addToCartBtn', function() {
+            const productId = Number($(this).data('product-id'));
+
+            if (!productId || isNaN(productId)) {
+                console.warn("No valid product ID found for add to cart");
+                return;
+            }
+
+            if (window.cartInstance) {
+                window.cartInstance.addToCart(productId, 1);
+
+                const $btn = $(this);
+                const originalText = $btn.html();
+                $btn.html('<i class="bi bi-check-lg"></i> Added!')
+                    .prop('disabled', true)
+                    .addClass('btn-success');
+
+                setTimeout(() => {
+                    $btn.html(originalText)
+                        .prop('disabled', false)
+                        .removeClass('btn-success');
+                }, 800);
+
+            } else {
+                console.error("Cart instance not available");
+            }
+        });
+
         $("#searchForm").submit((e) => {
             e.preventDefault();
 
@@ -118,27 +146,31 @@ export class Products {
     showModal(product) {
 
         const modalContent = `
-            <div class="row">
-                <div class="col-md-5 text-center">
-                    <img src="${product.image}" alt="${product.name}"
-                         class="img-fluid rounded mb-3"
-                         style="max-height: 350px; object-fit: contain;">
-                </div>
-                <div class="col-md-7">
-                    <h3>${product.name}</h3>
-                    <p class="text-muted mb-1"><strong>Brand:</strong> ${product.brand}</p>
-                    <p class="text-muted mb-1"><strong>Category:</strong> ${product.category}</p>
-                    <p class="text-muted mb-3"><strong>Stock:</strong> ${product.quantity} units</p>
-                    <h4 class="text-danger">€${product.price.toFixed(2)}</h4>
-                    <hr>
-                    <h5>Description</h5>
-                    <p>${product.description || 'No description available.'}</p>
-                </div>
+        <div class="row">
+            <div class="col-md-5 text-center">
+                <img src="${product.image}" alt="${product.name}"
+                     class="img-fluid rounded mb-3"
+                     style="max-height: 350px; object-fit: contain;">
             </div>
-        `;
+            <div class="col-md-7">
+                <h3>${product.name}</h3>
+                <p class="text-muted mb-1"><strong>Brand:</strong> ${product.brand}</p>
+                <p class="text-muted mb-1"><strong>Category:</strong> ${product.category}</p>
+                <p class="text-muted mb-3"><strong>Stock:</strong> ${product.quantity} units</p>
+                <h4 class="text-danger">€${product.price.toFixed(2)}</h4>
+                <hr>
+                <h5>Description</h5>
+                <p>${product.description || 'No description available.'}</p>
+            </div>
+        </div>
+    `;
 
         $('#modalBody').html(modalContent);
         $('#productModalLabel').text(product.name);
+
+        // ─── Important ───
+        // Store the product ID so the "Add to Cart" button knows what to add
+        $('#addToCartBtn').data('product-id', product.id);
 
         const modal = new bootstrap.Modal(
             document.getElementById('productModal')

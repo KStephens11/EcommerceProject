@@ -1,8 +1,10 @@
 export class Navbar {
 
-    constructor(userData, productsInstance) {
+    constructor(userData, productsInstance, ordersInstance, managementInstance) {
         this.userData = userData;
         this.products = productsInstance;
+        this.orders = ordersInstance;
+        this.management = managementInstance;
     }
 
     init() {
@@ -14,6 +16,7 @@ export class Navbar {
     showButton() {
         if (this.userData.roles.includes("ROLE_ADMIN")) {
             $("#productManagementBtn").show();
+            $("#ordersBtn").show()
         }
     }
 
@@ -22,17 +25,30 @@ export class Navbar {
         if (this.userData.roles.includes("ROLE_ADMIN")) {
 
             $("#productManagementBtn").click(() => {
-                $("#management-section").show();
                 $("#products-section").hide();
+                $("#orders-section").hide();
+                $("#management-section").show();
+                this.management.loadProducts();
+
             });
+
+            $("#ordersBtn").click(() => {
+                $("#management-section").hide();
+                $("#products-section").hide();
+                $("#orders-section").show();
+                this.orders.loadStats();
+                this.orders.loadOrders();
+            })
 
         }
 
         $("#homeBtn").click(() => {
             $("#management-section").hide();
+            $("#orders-section").hide();
             $("#products-section").show();
 
-            this.products.loadProducts();   // 🔥 now works
+            this.products.loadProducts();
+
         });
 
     }

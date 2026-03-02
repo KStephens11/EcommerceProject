@@ -1,16 +1,16 @@
-package com.tus.ecom.dto;
+package com.tus.ecom.dto.user;
 
-public class UserRequest {
+import com.tus.ecom.model.RoleEntity;
 
+public class UserResponse {
     private Integer id;
     private String username;
-    private String password;
-    public UserRequest() {}
+    private RoleEntity role;
 
-    public UserRequest(Integer id, String username, String password) {
+    public UserResponse(Integer id, String username, RoleEntity role) {
         this.id = id;
         this.username = username;
-        this.password = password;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -29,12 +29,11 @@ public class UserRequest {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public RoleEntity getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
-
 }

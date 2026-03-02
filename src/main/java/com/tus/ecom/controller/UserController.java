@@ -1,7 +1,7 @@
 package com.tus.ecom.controller;
 
-import com.tus.ecom.dto.UserRequest;
-import com.tus.ecom.dto.UserResponse;
+import com.tus.ecom.dto.user.UserRequest;
+import com.tus.ecom.dto.user.UserResponse;
 import com.tus.ecom.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;

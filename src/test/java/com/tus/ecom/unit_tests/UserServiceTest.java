@@ -1,7 +1,7 @@
 package com.tus.ecom.unit_tests;
 
-import com.tus.ecom.dto.UserRequest;
-import com.tus.ecom.dto.UserResponse;
+import com.tus.ecom.dto.user.UserRequest;
+import com.tus.ecom.dto.user.UserResponse;
 import com.tus.ecom.model.RoleEntity;
 import com.tus.ecom.model.UserEntity;
 import com.tus.ecom.repository.RoleRepository;
