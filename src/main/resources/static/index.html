@@ -19,50 +19,69 @@
     <body>
 
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-      <div class="container-fluid d-flex align-items-center">
+      <div class="container-fluid position-relative">
 
-        <!-- Brand -->
-        <button class="navbar-brand btn btn-link p-0" id="homeBtn">
-          Ecommerce Products
-        </button>
+        <!-- LEFT -->
+        <div class="d-flex align-items-center gap-2">
 
-        <button class="btn btn-primary" type="submit" id="productManagementBtn" style="display:none;">
-          Product Management
-        </button>
+          <!-- Brand -->
+          <button class="navbar-brand btn btn-link p-0" id="homeBtn">
+            Ecommerce Products
+          </button>
 
-        <button class="btn btn-primary" type="submit" id="ordersBtn" style="display:none;">
-          Orders
-        </button>
+          <button class="btn btn-primary" type="submit" id="productManagementBtn" style="display:none;">
+            Product Management
+          </button>
 
-        <!-- Center Search -->
-        <div class="flex-grow-1 d-flex justify-content-center">
-          <form id="searchForm" class="d-flex w-50">
-            <label for="searchInput"></label>
-            <input id="searchInput" class="form-control me-2" type="search" placeholder="Search">
+          <button class="btn btn-primary" type="submit" id="ordersBtn" style="display:none;">
+            Orders
+          </button>
 
-            <button id="searchButton" class="btn btn-light" type="submit">
+        </div>
+
+        <!-- CENTER -->
+        <div class="position-absolute start-50 translate-middle-x d-none d-lg-block"
+             style="width: 40%;">
+
+          <form id="searchForm" class="d-flex">
+
+            <input id="searchInput"
+                   class="form-control me-2"
+                   type="search"
+                   placeholder="Search">
+
+            <button id="searchButton"
+                    class="btn btn-light"
+                    type="submit">
               <i class="bi bi-search"></i>
             </button>
 
           </form>
+
         </div>
 
-        <!-- Right User + Logout -->
-        <div class="d-flex align-items-center gap-3">
+        <!-- RIGHT -->
+        <div class="ms-auto d-flex align-items-center gap-3">
 
           <button class="btn btn-outline-light position-relative" id="cartBtn">
             <i class="bi bi-cart"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count" id="cartCount">0</span>
+
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  id="cartCount">0</span>
           </button>
 
-          <span id="usernameDisplay" class="text-white fw-semibold"></span>
+          <span id="usernameDisplay"
+                class="text-white fw-semibold d-none d-md-inline"></span>
 
-          <button class="btn btn-secondary" id="logout">Logout</button>
+          <button class="btn btn-secondary btn-sm" id="logout">
+            Logout
+          </button>
 
         </div>
 
       </div>
     </nav>
+
 
     <!-- Cart Offcanvas Modal -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">

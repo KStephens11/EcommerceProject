@@ -11,6 +11,7 @@
   </style>
 </head>
 <body>
+
 <div class="login-box card shadow p-4">
   <h3 class="text-center mb-4">Sign In</h3>
 
@@ -19,19 +20,20 @@
       <label class="form-label">Username</label>
       <input type="text" class="form-control" id="loginUsername" required autofocus>
     </div>
+
     <div class="mb-3">
       <label class="form-label">Password</label>
       <input type="password" class="form-control" id="loginPassword" required>
     </div>
+
     <button type="submit" class="btn btn-primary w-100">Login</button>
   </form>
 
-  <div class="alert alert-danger mt-3 d-none" id="errorBox">
-    <strong>Error:</strong> <span id="errorText"></span>
-  </div>
-
   <div class="text-center mt-3">
-    <small>Don't have an account? <a href="/register" class="text-success fw-bold">Register here</a></small>
+    <small>
+      Don't have an account?
+      <a href="/register" class="text-success fw-bold">Register here</a>
+    </small>
   </div>
 </div>
 
@@ -39,14 +41,9 @@
 <script src="js/jquery-4.0.0.min.js"></script>
 
 <script>
+  $("#loginForm").on("submit", function (e) {
 
-  $("#loginForm").on("submit", (e) => {
-    loginUser(e);
-  });
-
-  function loginUser(event) {
-    event.preventDefault();
-    $("#errorBox").addClass("d-none");
+    e.preventDefault();
 
     const user = {
       username: $("#loginUsername").val().trim(),
@@ -61,22 +58,15 @@
       xhrFields: {
         withCredentials: true
       },
-      // Move to index.html
+
       success: function () {
         window.location.href = "/";
-      },
-      error: function (xhr) {
-        let message = "Login failed. Check credentials.";
-        try {
-          message = JSON.parse(xhr.responseText).message || message;
-        } catch (e) {
-        }
-        $("#errorText").text(message);
-        $("#errorBox").removeClass("d-none");
       }
-    });
-  }
 
+    });
+
+  });
 </script>
+
 </body>
 </html>

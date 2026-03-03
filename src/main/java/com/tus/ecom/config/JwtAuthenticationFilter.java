@@ -83,7 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } catch (Exception ignored) {
-            // Invalid token → just continue filter chain
+            // Invalid token, just continue filter chain
         }
 
         filterChain.doFilter(request, response);
