@@ -2,6 +2,9 @@ export class Products {
 
     constructor() {
         this.allProducts = [];
+        this.currentPage = 0;
+        this.pageSize = 9;
+        this.totalPages = 0;
     }
 
     init() {
@@ -81,28 +84,38 @@ export class Products {
 
         })
 
+        $(document).on('click', '.page-btn', (e) => {
+            const page = Number($(e.currentTarget).data('page'));
+            this.loadProducts(page);
+        });
+
     }
 
-    loadProducts() {
+    loadProducts(page = 0) {
+
+        this.currentPage = page;
+
         $.ajax({
             url: '/api/products',
             method: 'GET',
             dataType: 'json',
-            data: { page: 0, size: 10 },
+            data: { page: this.currentPage, size: this.pageSize },
 
-            success: (products) => {
+            success: (response) => {
 
-                this.allProducts = products.content;
+                this.allProducts = response.content;
 
-                this.renderProducts(products.content);
+                this.totalPages = response.page.totalPages;
+                this.currentPage = response.page.number;
+
+                this.renderProducts(response.content);
+                this.renderPagination();
             },
 
             error: (xhr, status, error) => {
                 $('#error')
                     .text('Failed to load products: ' + error)
                     .show();
-
-                console.error('Error:', error);
             }
         });
     }
@@ -141,6 +154,27 @@ export class Products {
             });
         }
 
+    }
+
+    renderPagination() {
+
+        const container = $('#pagination');
+        container.empty();
+
+        if (this.totalPages <= 1) return;
+
+        for (let i = 0; i < this.totalPages; i++) {
+
+            const activeClass = i === this.currentPage ? 'active' : '';
+
+            container.append(`
+            <li class="page-item ${activeClass}">
+                <button class="page-link page-btn" data-page="${i}">
+                    ${i + 1}
+                </button>
+            </li>
+        `);
+        }
     }
 
     showModal(product) {

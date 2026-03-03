@@ -136,7 +136,8 @@ export class ProductManagement {
         const file = $("#productImageFile")[0].files[0];
 
         if (!file) {
-            this.submitProduct(null);
+            const existingImage = $("#productImage").val() || null;
+            this.submitProduct(existingImage);
             return;
         }
 

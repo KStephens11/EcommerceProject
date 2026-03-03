@@ -25,8 +25,24 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public ProductEntity updateProduct(ProductEntity product) {
-        return productRepository.save(product);
+    public ProductEntity updateProduct(ProductEntity updatedProduct) {
+
+        ProductEntity existing = productRepository
+                .findById(updatedProduct.getId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        existing.setName(updatedProduct.getName());
+        existing.setBrand(updatedProduct.getBrand());
+        existing.setCategory(updatedProduct.getCategory());
+        existing.setPrice(updatedProduct.getPrice());
+        existing.setQuantity(updatedProduct.getQuantity());
+
+        // Only update image if it's not blank
+        if (updatedProduct.getImage() != null && !updatedProduct.getImage().isBlank()) {
+            existing.setImage(updatedProduct.getImage());
+        }
+
+        return productRepository.save(existing);
     }
 
     public Page<ProductEntity> getAllProducts(Pageable pageable) {
