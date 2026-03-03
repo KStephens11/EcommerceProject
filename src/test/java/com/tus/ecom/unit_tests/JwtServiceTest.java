@@ -22,7 +22,7 @@ public class JwtServiceTest {
 
         jwtService = new JwtService();
 
-        String secret = "H7KBK0IIVIGil7GQJVP7lXO0W7KKeHwTHMRpi7U4n2p";
+        String secret = "6BFCuY5BT6j6YT1XFbgEPmAueblvwcDUIA0NV1SN1nJjYSfOgBtIYEcwDc9nOtr2zJCCLVZEXgsV5rC6fisOUX";
         setField(jwtService, "secret", secret);
         setField(jwtService, "expiration", expiration);
     }
