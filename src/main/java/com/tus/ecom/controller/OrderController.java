@@ -5,6 +5,7 @@ import com.tus.ecom.dto.order.OrderRequest;
 import com.tus.ecom.dto.order.OrderResponseDto;
 import com.tus.ecom.service.OrderService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,24 +22,25 @@ public class OrderController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public OrderResponseDto createOrder(
+    public ResponseEntity<OrderResponseDto> createOrder(
             @RequestBody OrderRequest req,
             Authentication authentication) {
 
-        return orderService.createOrder(
+        OrderResponseDto response = orderService.createOrder(
                 authentication.getName(),
                 req.getItems()
         );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public List<OrderResponseDto> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<List<OrderResponseDto>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @GetMapping("/stats/sales-by-category")
-    public List<CategorySalesDto> getSalesByCategory() {
-        return orderService.getSalesByCategory();
+    public ResponseEntity<List<CategorySalesDto>> getSalesByCategory() {
+        return ResponseEntity.ok(orderService.getSalesByCategory());
     }
 }

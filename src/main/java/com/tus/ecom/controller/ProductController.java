@@ -1,13 +1,14 @@
 package com.tus.ecom.controller;
 
+import com.tus.ecom.dto.product.ProductRequestDto;
+import com.tus.ecom.dto.product.ProductResponseDto;
 import com.tus.ecom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import com.tus.ecom.model.ProductEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -32,13 +33,16 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductEntity>> getProducts(Pageable pageable) {
+    public ResponseEntity<Page<ProductResponseDto>> getProducts(Pageable pageable) {
         return ResponseEntity.ok(productService.getAllProducts(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<ProductEntity> addProduct(@RequestBody ProductEntity product) {
-        return ResponseEntity.ok(productService.addProduct(product));
+    public ResponseEntity<ProductResponseDto> addProduct(
+            @RequestBody ProductRequestDto productRequest) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productService.addProduct(productRequest));
     }
 
     @DeleteMapping("/{id}")
@@ -48,30 +52,32 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductEntity> updateProduct(
+    public ResponseEntity<ProductResponseDto> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductEntity product) {
+            @RequestBody ProductRequestDto productRequest) {
 
-        product.setId(id);
-        return ResponseEntity.ok(productService.updateProduct(product));
+        return ResponseEntity.ok(
+                productService.updateProduct(id, productRequest)
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductEntity> getProductById(@PathVariable Long id) {
-        ProductEntity product = productService.getProductById(id);
-        return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
+    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
+
+        return productService.getProductById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/name")
-    public ResponseEntity<Page<ProductEntity>> searchProducts(@RequestParam(required = false) String name, Pageable pageable) {
+    public ResponseEntity<Page<ProductResponseDto>> searchProducts(
+            @RequestParam(required = false) String name,
+            Pageable pageable) {
 
-        Page<ProductEntity> result;
-
-        if (name == null || name.isBlank()) {
-            result = productService.getAllProducts(pageable);
-        } else {
-            result = productService.getProductsByName(name, pageable);
-        }
+        Page<ProductResponseDto> result =
+                (name == null || name.isBlank())
+                        ? productService.getAllProducts(pageable)
+                        : productService.getProductsByName(name, pageable);
 
         return ResponseEntity.ok(result);
     }
@@ -81,7 +87,8 @@ public class ProductController {
             @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/uploads/products/";
+        String uploadDir = System.getProperty("user.dir")
+                + "/src/main/resources/static/uploads/products/";
 
         String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
@@ -94,8 +101,11 @@ public class ProductController {
     }
 
     @GetMapping("/low-stock")
-    public List<ProductEntity> getLowStock(@RequestParam(defaultValue = "5") int threshold) {
-        return productService.getLowStockProducts(threshold);
-    }
+    public ResponseEntity<List<ProductResponseDto>> getLowStock(
+            @RequestParam(defaultValue = "5") int threshold) {
 
+        return ResponseEntity.ok(
+                productService.getLowStockProducts(threshold)
+        );
+    }
 }

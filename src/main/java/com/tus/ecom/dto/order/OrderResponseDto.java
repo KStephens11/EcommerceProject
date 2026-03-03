@@ -13,7 +13,7 @@ public class OrderResponseDto {
 
     public OrderResponseDto() {}
 
-    public OrderResponseDto(Long id, String username, LocalDateTime orderDate, BigDecimal totalAmount, List<OrderItemResponseDto> items) {
+    public OrderResponseDto(Long id, String username, LocalDateTime orderDate, BigDecimal totalAmount, List<OrderItemResponseDto> items, int itemsCount) {
         this.id = id;
         this.username = username;
         this.orderDate = orderDate;
@@ -60,4 +60,5 @@ public class OrderResponseDto {
     public void setItems(List<OrderItemResponseDto> items) {
         this.items = items;
     }
+
 }

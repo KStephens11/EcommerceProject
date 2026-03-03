@@ -6,16 +6,18 @@ public class OrderItemResponseDto {
     private Long id;
     private Long productId;
     private String productName;
+    private String productCategory;
     private Integer quantity;
     private BigDecimal price;
 
 
     public OrderItemResponseDto() {}
 
-    public OrderItemResponseDto(Long id, Long productId, String productName, Integer quantity, BigDecimal price) {
+    public OrderItemResponseDto(Long id, Long productId, String productName, String productCategory, Integer quantity, BigDecimal price) {
         this.id = id;
         this.productId = productId;
         this.productName = productName;
+        this.productCategory = productCategory;
         this.quantity = quantity;
         this.price = price;
     }
@@ -42,6 +44,14 @@ public class OrderItemResponseDto {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
     }
 
     public Integer getQuantity() {

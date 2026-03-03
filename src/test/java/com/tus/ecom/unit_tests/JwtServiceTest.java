@@ -22,7 +22,7 @@ public class JwtServiceTest {
 
         jwtService = new JwtService();
 
-        String secret = "mysecretkeymysecretkeymysecretkey123456";
+        String secret = "H7KBK0IIVIGil7GQJVP7lXO0W7KKeHwTHMRpi7U4n2p";
         setField(jwtService, "secret", secret);
         setField(jwtService, "expiration", expiration);
     }
@@ -42,7 +42,7 @@ public class JwtServiceTest {
         String token = jwtService.generateToken(userDetails);
 
         assertNotNull(token);
-        assertTrue(jwtService.extractUsername(token).equals("Joe"));
+        assertEquals("Joe", jwtService.extractUsername(token));
     }
 
     @Test

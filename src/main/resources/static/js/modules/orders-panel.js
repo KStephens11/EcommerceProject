@@ -97,7 +97,7 @@ export class OrdersPanel {
     }
 
     loadOrders() {
-        $.get("/api/orders", (orders) => {  // assume you add this endpoint
+        $.get("/api/orders", (orders) => {
             this.ordersTableBody.empty();
 
             if (orders.length === 0) {
@@ -107,15 +107,16 @@ export class OrdersPanel {
 
             orders.forEach(order => {
                 const itemsCount = order.items?.length || 0;
+
                 const row = `
-                    <tr>
-                        <td>#${order.id}</td>
-                        <td>${new Date(order.orderDate).toLocaleString()}</td>
-                        <td>${order.username || "Guest"}</td>
-                        <td>${itemsCount} item${itemsCount !== 1 ? 's' : ''}</td>
-                        <td class="text-success">€${Number(order.totalAmount).toFixed(2)}</td>
-                    </tr>
-                `;
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${new Date(order.orderDate).toLocaleString()}</td>
+                    <td>${order.username || "Guest"}</td>
+                    <td>${itemsCount}</td>
+                    <td class="text-success">€${Number(order.totalAmount).toFixed(2)}</td>
+                </tr>
+            `;
                 this.ordersTableBody.append(row);
             });
         }).fail(() => {

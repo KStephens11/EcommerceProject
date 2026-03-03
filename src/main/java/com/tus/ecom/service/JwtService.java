@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
@@ -19,7 +20,9 @@ public class JwtService {
     private long expiration;
 
     private SecretKey getKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        return Keys.hmacShaKeyFor(
+                Base64.getDecoder().decode(secret)
+        );
     }
 
     private Claims parseToken(String token) {
@@ -48,7 +51,7 @@ public class JwtService {
         cookie.setPath("/");
         cookie.setMaxAge((int) (expiration / 1000));
         cookie.setSecure(false); // localhost testing
-        cookie.setAttribute("SameSite", "Lax");
+        cookie.setAttribute("SameSite", "Strict");
 
         return cookie;
     }

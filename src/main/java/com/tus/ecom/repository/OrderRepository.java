@@ -10,13 +10,14 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
+
     @Query("""
-        SELECT p.category, SUM(oi.quantity * oi.price)
-        FROM OrderItemEntity oi
-        JOIN oi.product p
-        GROUP BY p.category
-        ORDER BY SUM(oi.quantity * oi.price) DESC
-    """)
+    SELECT oi.productCategory, SUM(oi.quantity * oi.price)
+    FROM OrderItemEntity oi
+    GROUP BY oi.productCategory
+    ORDER BY SUM(oi.quantity * oi.price) DESC
+""")
     List<Object[]> findSalesByCategory();
+
 
 }

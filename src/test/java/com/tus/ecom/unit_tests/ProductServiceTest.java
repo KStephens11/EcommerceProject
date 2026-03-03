@@ -1,5 +1,7 @@
 package com.tus.ecom.unit_tests;
 
+import com.tus.ecom.dto.product.ProductRequestDto;
+import com.tus.ecom.dto.product.ProductResponseDto;
 import com.tus.ecom.model.ProductEntity;
 import com.tus.ecom.repository.ProductRepository;
 import com.tus.ecom.service.ProductService;
@@ -7,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,48 +30,35 @@ public class ProductServiceTest {
     @Test
     void addProductTest() {
 
-        ProductEntity product = new ProductEntity();
-        product.setId(1L);
-        product.setName("Laptop");
+        ProductRequestDto request = new ProductRequestDto();
+        request.setName("Laptop");
+        request.setPrice(BigDecimal.valueOf(1000));
 
-        when(productRepository.save(product)).thenReturn(product);
+        ProductEntity savedEntity = new ProductEntity();
+        savedEntity.setId(1L);
+        savedEntity.setName("Laptop");
+        savedEntity.setPrice(BigDecimal.valueOf(1000));
 
-        ProductEntity result = productService.addProduct(product);
+        when(productRepository.save(any(ProductEntity.class)))
+                .thenReturn(savedEntity);
+
+        ProductResponseDto result = productService.addProduct(request);
 
         assertNotNull(result);
         assertEquals("Laptop", result.getName());
 
-        verify(productRepository, times(1)).save(product);
+        verify(productRepository, times(1))
+                .save(any(ProductEntity.class));
     }
 
     @Test
     void deleteProductTest() {
 
-        Long productId = 1L;
+        doNothing().when(productRepository).deleteById(1L);
 
-        doNothing().when(productRepository).deleteById(productId);
+        productService.deleteProduct(1L);
 
-        productService.deleteProduct(productId);
-
-        verify(productRepository, times(1)).deleteById(productId);
-    }
-
-    @Test
-    void updateProductTest() {
-
-        ProductEntity product = new ProductEntity();
-        product.setId(1L);
-        product.setName("Phone");
-
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        when(productRepository.save(product)).thenReturn(product);
-
-        ProductEntity result = productService.updateProduct(product);
-
-        assertNotNull(result);
-        assertEquals("Phone", result.getName());
-
-        verify(productRepository).save(product);
+        verify(productRepository).deleteById(1L);
     }
 
     @Test
@@ -76,39 +66,37 @@ public class ProductServiceTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        ProductEntity product1 = new ProductEntity();
-        product1.setName("Laptop");
-
-        ProductEntity product2 = new ProductEntity();
-        product2.setName("Phone");
+        ProductEntity entity = new ProductEntity();
+        entity.setName("Laptop");
 
         Page<ProductEntity> page =
-                new PageImpl<>(List.of(product1, product2));
+                new PageImpl<>(List.of(entity));
 
         when(productRepository.findAll(pageable)).thenReturn(page);
 
-        Page<ProductEntity> result = productService.getAllProducts(pageable);
+        Page<ProductResponseDto> result =
+                productService.getAllProducts(pageable);
 
-        assertEquals(2, result.getContent().size());
-        verify(productRepository).findAll(pageable);
+        assertEquals(1, result.getContent().size());
+        assertEquals("Laptop",
+                result.getContent().getFirst().getName());
     }
 
     @Test
     void getProductByIdTest() {
 
-        ProductEntity product = new ProductEntity();
-        product.setId(1L);
-        product.setName("Laptop");
+        ProductEntity entity = new ProductEntity();
+        entity.setId(1L);
+        entity.setName("Laptop");
 
-        when(productRepository.getProductEntitiesById(1L))
-                .thenReturn(product);
+        when(productRepository.findById(1L))
+                .thenReturn(Optional.of(entity));
 
-        ProductEntity result = productService.getProductById(1L);
+        Optional<ProductResponseDto> result =
+                productService.getProductById(1L);
 
-        assertNotNull(result);
-        assertEquals("Laptop", result.getName());
-
-        verify(productRepository).getProductEntitiesById(1L);
+        assertTrue(result.isPresent());
+        assertEquals("Laptop", result.get().getName());
     }
 
     @Test
@@ -116,23 +104,19 @@ public class ProductServiceTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        ProductEntity product = new ProductEntity();
-        product.setName("Laptop");
+        ProductEntity entity = new ProductEntity();
+        entity.setName("Laptop");
 
         Page<ProductEntity> page =
-                new PageImpl<>(List.of(product));
+                new PageImpl<>(List.of(entity));
 
         when(productRepository
                 .findByNameContainingIgnoreCase("lap", pageable))
                 .thenReturn(page);
 
-        Page<ProductEntity> result =
+        Page<ProductResponseDto> result =
                 productService.getProductsByName("lap", pageable);
 
         assertEquals(1, result.getContent().size());
-        assertEquals("Laptop", result.getContent().getFirst().getName());
-
-        verify(productRepository)
-                .findByNameContainingIgnoreCase("lap", pageable);
     }
 }

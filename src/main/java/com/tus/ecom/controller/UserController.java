@@ -12,33 +12,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+	private final UserService userService;
 
 	public UserController(UserService userService) {
-        this.userService = userService;
+		this.userService = userService;
 	}
 
-    @GetMapping
-	@ResponseStatus(HttpStatus.OK)
-    public List<UserResponse> getUsernames() {
-		return this.userService.getUsernames();
-    }
+	@GetMapping
+	public ResponseEntity<List<UserResponse>> getUsernames() {
+		return ResponseEntity.ok(userService.getUsernames());
+	}
 
 	@GetMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Optional<UserResponse> getUsersById(@PathVariable Integer id) {
-		return this.userService.getUsersById(id);
+	public ResponseEntity<UserResponse> getUsersById(@PathVariable Integer id) {
+		return userService.getUsersById(id)
+				.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@RequestBody UserRequest req) {
-
 		try {
 			UserResponse response = userService.createUser(req);
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -51,10 +49,11 @@ public class UserController {
 	}
 
 	@GetMapping("/me")
-	public Map<String, Object> getLoggedinUser(Authentication authentication){
+	public ResponseEntity<Map<String, Object>> getLoggedinUser(Authentication authentication){
 
 		if (authentication == null) {
-			return Map.of("error", "Not authenticated");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body(Map.of("error", "Not authenticated"));
 		}
 
 		Map<String, Object> response = new HashMap<>();
@@ -66,7 +65,6 @@ public class UserController {
 						.map(GrantedAuthority::getAuthority)
 						.toList());
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
-	
 }
