@@ -122,7 +122,14 @@ export class ProductManagement {
             $("#productCategory").val(product.category);
             $("#productPrice").val(product.price);
             $("#productStock").val(product.quantity);
-            $("#productImage").val(product.image);
+            $("#productImage").val("");
+            $("#productImageFile").val("");
+
+            // Clear old image input
+            const oldInput = document.getElementById("productImageFile");
+            if (!oldInput) return;
+            const newInput = oldInput.cloneNode(true);
+            oldInput.parentNode.replaceChild(newInput, oldInput);
 
             $("#productFormTitle").text("Update Product");
 
