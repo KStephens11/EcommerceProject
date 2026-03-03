@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -59,6 +60,7 @@ public class ProductServiceTest {
         product.setId(1L);
         product.setName("Phone");
 
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(productRepository.save(product)).thenReturn(product);
 
         ProductEntity result = productService.updateProduct(product);
@@ -128,7 +130,7 @@ public class ProductServiceTest {
                 productService.getProductsByName("lap", pageable);
 
         assertEquals(1, result.getContent().size());
-        assertEquals("Laptop", result.getContent().get(0).getName());
+        assertEquals("Laptop", result.getContent().getFirst().getName());
 
         verify(productRepository)
                 .findByNameContainingIgnoreCase("lap", pageable);
