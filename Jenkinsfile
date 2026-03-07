@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build and Test') {
             steps {
-                sh 'mvn clean test package'
+                sh 'mvn clean verify package'
             }
         }
 
