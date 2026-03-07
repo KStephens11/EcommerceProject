@@ -7,7 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class KarateTestRunner {
+class KarateTestRunnerIT {
 
     @LocalServerPort
     int randomServerPort;
