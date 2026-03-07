@@ -7,12 +7,12 @@ Feature: Product Controller Integration Test
     # Login and capture JWT cookie
     Given path '/api/auth/login'
     And request
-    """
-    {
+      """
+      {
         "username": "admin",
         "password": "admin"
-    }
-    """
+      }
+      """
     When method post
     Then status 200
 
@@ -25,17 +25,17 @@ Feature: Product Controller Integration Test
     Given path '/api/products'
 
     And request
-    """
-    {
+      """
+      {
         "name": "Test Product",
         "price": 100,
         "quantity": 10
-    }
-    """
+      }
+      """
 
     When method post
 
-    Then status 200
+    Then status 201
     And match response.name == 'Test Product'
     And match response.quantity == 10
 
@@ -57,16 +57,16 @@ Feature: Product Controller Integration Test
     Given path '/api/products'
 
     And request
-    """
-    {
+      """
+      {
         "name": "Test Product X",
         "price": 100,
         "quantity": 10
-    }
-    """
+      }
+      """
 
     When method post
-    Then status 200
+    Then status 201
 
     * def productId = response.id
 
@@ -78,13 +78,13 @@ Feature: Product Controller Integration Test
     Given path '/api/products/', productId
 
     And request
-    """
-    {
+      """
+      {
         "name": "Updated Product",
         "price": 150,
         "quantity": 20
-    }
-    """
+      }
+      """
 
     When method put
 
@@ -96,15 +96,15 @@ Feature: Product Controller Integration Test
 
     Given path '/api/products'
     And request
-    """
-    {
+      """
+      {
         "name": "Delete Test Product",
         "price": 50,
         "quantity": 5
-    }
-    """
+      }
+      """
     When method post
-    Then status 200
+    Then status 201
 
     * def productId = response.id
 

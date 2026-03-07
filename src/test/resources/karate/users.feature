@@ -46,7 +46,7 @@ Feature: User Controller Integration Test
     Given path '/api/users/', userId
     When method get
     Then status 200
-    And match response.username == 'karate_test_user'
+    And match response.username == 'test_user'
 
 
   Scenario: Register user with invalid data should return BAD REQUEST
