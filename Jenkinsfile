@@ -2,10 +2,17 @@ pipeline {
 
     agent any
 
+    tools {
+            jdk 'Java25'
+            maven 'maven'
+        }
+
     stages {
 
         stage('Checkout') {
             steps {
+                sh 'java -version'
+                sh 'javac -version'
                 checkout scm
             }
         }
