@@ -25,7 +25,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('LocalSonar') {
+                withSonarQubeEnv('SonarQube') {
                     sh '''
                       mvn sonar:sonar \
                         -Dsonar.projectKey=EcommeerceProject
