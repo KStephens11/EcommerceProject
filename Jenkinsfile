@@ -62,6 +62,15 @@ pipeline {
                 allowMissing: true
             ])
 
+            publishHTML([
+                reportDir: 'target/site/karate-reports', // directory where karate-summary.html is
+                reportFiles: 'karate-summary.html',      // main HTML file
+                reportName: 'Karate Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: true
+            ])
+
         }
     }
 }
