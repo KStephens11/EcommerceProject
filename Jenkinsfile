@@ -51,6 +51,7 @@ pipeline {
 
             junit '**/target/surefire-reports/*.xml'
             junit '**/target/failsafe-reports/*.xml'
+            archiveArtifacts artifacts: '**/target/*.jar, **/target/*.war', allowEmptyArchive: true
 
             publishHTML([
                 reportDir: 'target/site/jacoco',
@@ -58,7 +59,7 @@ pipeline {
                 reportName: 'JaCoCo Coverage Report',
                 keepAll: true,
                 alwaysLinkToLastBuild: true,
-                allowMissing: false
+                allowMissing: true
             ])
 
         }
