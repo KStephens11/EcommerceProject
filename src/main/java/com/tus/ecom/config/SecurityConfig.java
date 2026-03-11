@@ -27,7 +27,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -45,6 +45,8 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/users/register"
                         ).permitAll()
+                        .requestMatchers("/api/products", "/api/products/name").hasRole("CUSTOMER")
+                        .requestMatchers("/api/orders/**", "/api/products/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 // Redirect unauthorized users to login page
@@ -59,7 +61,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 
