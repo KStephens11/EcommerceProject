@@ -1,49 +1,36 @@
 package com.tus.ecom.stepdefs;
 
 import com.tus.ecom.pages.LoginPage;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginSteps {
 
-    WebDriver driver;
+    private final BaseSteps base;
     LoginPage loginPage;
 
-    @Before
-    public void setUp() {
-        driver = new ChromeDriver();
+    public LoginSteps(BaseSteps base) {
+        this.base = base;
     }
-
-    @After
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
 
     @Given("user is on login page")
     public void user_on_login_page() {
-        driver.get("http://localhost:8080/login");
-        loginPage = new LoginPage(driver);
+        base.driver.get("http://localhost:8080/login");
+        loginPage = new LoginPage(base.driver);
     }
 
     @When("user enters username {string} and password {string}")
     public void enter_credentials(String user, String pass) {
-
         loginPage.enterUsername(user);
         loginPage.enterPassword(pass);
     }
@@ -54,12 +41,24 @@ public class LoginSteps {
     }
 
     @Then("user should see homepage")
-    public void verify_dashboard() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlContains("http://localhost:8080/"));
-
-        assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains("http://localhost:8080/"));
-        driver.quit();
+    public void verify_homepage() {
+        WebDriverWait wait = new WebDriverWait(base.driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.urlToBe("http://localhost:8080/"));
+        assertEquals("http://localhost:8080/", base.driver.getCurrentUrl());
     }
 
+    @Then("the page should contain {string}")
+    public void page_should_contain(String text) {
+        WebDriverWait wait = new WebDriverWait(base.driver, Duration.ofSeconds(10));
+        wait.until(d -> Objects.requireNonNull(d.getPageSource()).contains(text));
+        assertTrue(Objects.requireNonNull(base.driver.getPageSource()).contains(text),
+                "Expected page to contain: " + text);
+    }
+
+    @Then("user should remain on login page")
+    public void user_remains_on_login_page() {
+        WebDriverWait wait = new WebDriverWait(base.driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.urlContains("/login"));
+        assertTrue(Objects.requireNonNull(base.driver.getCurrentUrl()).contains("/login"));
+    }
 }
