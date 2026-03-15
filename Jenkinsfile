@@ -29,9 +29,9 @@ pipeline {
           steps {
             script {
               if (!params.RUN_UI_TESTS) {
-                bat "mvn -B clean verify -DskipITs=true"
+                sh "mvn -B clean verify -DskipITs=true"
               } else {
-                bat "mvn -B clean verify -DskipITs=false"
+                sh "mvn -B clean verify -DskipITs=false"
               }
             }
           }
