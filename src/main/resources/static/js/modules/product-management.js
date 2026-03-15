@@ -122,7 +122,7 @@ export class ProductManagement {
             $("#productCategory").val(product.category);
             $("#productPrice").val(product.price);
             $("#productStock").val(product.quantity);
-            $("#productImage").val("");
+            $("#productImage").val(product.image);
             $("#productImageFile").val("");
 
             // Clear old image input
@@ -141,7 +141,8 @@ export class ProductManagement {
     saveProduct() {
 
         const file = $("#productImageFile")[0].files[0];
-
+        console.log("File:", file);
+        console.log("Existing image value:", $("#productImage").val());
         if (!file) {
             const existingImage = $("#productImage").val() || null;
             this.submitProduct(existingImage);
