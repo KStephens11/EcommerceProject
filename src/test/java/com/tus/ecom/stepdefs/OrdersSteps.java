@@ -9,11 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OrdersSteps {
 
-    private final BaseSteps base;
     OrdersPage ordersPage;
 
     public OrdersSteps(BaseSteps base) {
-        this.base = base;
         this.ordersPage = new OrdersPage(base.driver);
     }
 
