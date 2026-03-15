@@ -138,7 +138,7 @@ Feature: Product Controller Integration Test
   Scenario: Upload product image
 
     Given path '/api/products/upload-image'
-    And multipart file file = { read: 'classpath:karate/test-image.png', filename: 'test-image.png', contentType: 'image/png' }
+    And multipart file file = { read: 'classpath:test-image.png', filename: 'test-image.png', contentType: 'image/png' }
 
     When method post
 
