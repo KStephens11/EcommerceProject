@@ -7,16 +7,15 @@ pipeline {
         maven 'maven'
     }
 
+    parameters {
+        booleanParam(
+            name: 'RUN_UI_TESTS',
+            defaultValue: false,
+            description: 'Run Karate/Selenium tests'
+        )
+    }
+
     stages {
-
-        parameters {
-            booleanParam(
-                name: 'RUN_UI_TESTS',
-                defaultValue: false,
-                description: 'Run Selenium UI tests'
-            )
-        }
-
 
         stage('Checkout') {
             steps {
