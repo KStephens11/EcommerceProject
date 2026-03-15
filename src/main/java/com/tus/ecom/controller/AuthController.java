@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(
+    public ResponseEntity<Void> login(
             @RequestBody JwtRequest request,
             HttpServletResponse response) {
 

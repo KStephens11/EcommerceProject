@@ -1,5 +1,6 @@
 package com.tus.ecom.controller;
 
+import com.tus.ecom.dto.ErrorResponse;
 import com.tus.ecom.dto.user.UserRequest;
 import com.tus.ecom.dto.user.UserResponse;
 import com.tus.ecom.service.UserService;
@@ -36,16 +37,16 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody UserRequest req) {
-		try {
+	public ResponseEntity<UserResponse> registerUser(@RequestBody UserRequest req) {
 			UserResponse response = userService.createUser(req);
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
-		}
-		catch (RuntimeException ex) {
-			return ResponseEntity
-					.status(HttpStatus.BAD_REQUEST)
-					.body(Map.of("message", ex.getMessage()));
-		}
+	}
+
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
+		return ResponseEntity
+				.status(HttpStatus.BAD_REQUEST)
+				.body(new ErrorResponse(ex.getMessage()));
 	}
 
 	@GetMapping("/me")
