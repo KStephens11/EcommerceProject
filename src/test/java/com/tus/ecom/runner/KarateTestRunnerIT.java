@@ -1,4 +1,4 @@
-package com.tus.ecom;
+package com.tus.ecom.runner;
 
 import com.intuit.karate.junit5.Karate;
 import org.junit.jupiter.api.extension.ExtendWith;

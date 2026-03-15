@@ -1,4 +1,4 @@
-package com.tus.ecom;
+package com.tus.ecom.runner;
 
 import org.junit.platform.suite.api.*;
 
@@ -11,5 +11,5 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @ConfigurationParameter(key = FEATURES_PROPERTY_NAME, value = "src/test/features/cucumber")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.tus.ecom")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty, html:target/cucumber-report")
-public class TestRunnerIT {
+public class CucumberTestRunnerIT {
 }
