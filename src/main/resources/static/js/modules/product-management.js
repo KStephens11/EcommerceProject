@@ -44,6 +44,7 @@ export class ProductManagement {
 
         // Edit product button (delegated event)
         $(document).on("click", ".edit-product", (e) => {
+            this.clearForm();
             const id = $(e.currentTarget).data("id");
             this.editProduct(id);
         });
@@ -110,6 +111,7 @@ export class ProductManagement {
         $("#productPrice").val("");
         $("#productStock").val("");
         $("#productImage").val("");
+        this.hideFormError();
     }
 
     editProduct(id) {
@@ -191,8 +193,24 @@ export class ProductManagement {
             success: () => {
                 this.closeModal("productFormModal");
                 this.loadProducts();
+            },
+            error: (xhr) => {
+                const msg = xhr.responseJSON?.message
+                    || "Something went wrong. Please try again.";
+                this.showFormError(msg);
             }
         });
+    }
+
+
+    showFormError(message) {
+        $("#productFormError")
+            .text(message)
+            .removeClass("d-none");
+    }
+
+    hideFormError() {
+        $("#productFormError").addClass("d-none");
     }
 
     deleteProduct() {

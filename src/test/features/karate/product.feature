@@ -28,6 +28,8 @@ Feature: Product Controller Integration Test
       """
       {
         "name": "Test Product",
+        "brand": 'Test Brand',
+        "category": "Test Category",
         "price": 100,
         "quantity": 10
       }
@@ -60,6 +62,8 @@ Feature: Product Controller Integration Test
       """
       {
         "name": "Test Product X",
+        "brand": 'Test Brand',
+        "category": "Test Category",
         "price": 100,
         "quantity": 10
       }
@@ -81,6 +85,8 @@ Feature: Product Controller Integration Test
       """
       {
         "name": "Updated Product",
+        "brand": 'Updated Brand',
+        "category": "Updated Category",
         "price": 150,
         "quantity": 20
       }
@@ -99,6 +105,8 @@ Feature: Product Controller Integration Test
       """
       {
         "name": "Delete Test Product",
+        "brand": 'Delete Test Brand',
+        "category": "Delete Test Category",
         "price": 50,
         "quantity": 5
       }
@@ -168,3 +176,108 @@ Feature: Product Controller Integration Test
 
     Then status 200
     And match response.content == '#array'
+
+  Scenario: Add product with missing name should return 400
+
+    Given path '/api/products'
+    And request
+    """
+    {
+      "brand": "Test Brand",
+      "category": "Test Category",
+      "price": 100,
+      "quantity": 10
+    }
+    """
+    When method post
+    Then status 400
+    And match response.message == 'Product name is required.'
+
+
+  Scenario: Add product with missing brand should return 400
+
+    Given path '/api/products'
+    And request
+    """
+    {
+      "name": "Test Product",
+      "category": "Test Category",
+      "price": 100,
+      "quantity": 10
+    }
+    """
+    When method post
+    Then status 400
+    And match response.message == 'Brand is required.'
+
+
+  Scenario: Add product with missing category should return 400
+
+    Given path '/api/products'
+    And request
+    """
+    {
+      "name": "Test Product",
+      "brand": "Test Brand",
+      "price": 100,
+      "quantity": 10
+    }
+    """
+    When method post
+    Then status 400
+    And match response.message == 'Category is required.'
+
+
+  Scenario: Add product with negative price should return 400
+
+    Given path '/api/products'
+    And request
+    """
+    {
+      "name": "Test Product",
+      "brand": "Test Brand",
+      "category": "Test Category",
+      "price": -10,
+      "quantity": 10
+    }
+    """
+    When method post
+    Then status 400
+    And match response.message == 'Price must be a positive value.'
+
+
+  Scenario: Add product with negative quantity should return 400
+
+    Given path '/api/products'
+    And request
+    """
+    {
+      "name": "Test Product",
+      "brand": "Test Brand",
+      "category": "Test Category",
+      "price": 100,
+      "quantity": -1
+    }
+    """
+    When method post
+    Then status 400
+    And match response.message == 'Stock quantity must be a positive value.'
+
+
+  Scenario: Update product with missing name should return 400
+
+    * def productId = 1
+
+    Given path '/api/products/', productId
+    And request
+    """
+    {
+      "brand": "Updated Brand",
+      "category": "Updated Category",
+      "price": 150,
+      "quantity": 20
+    }
+    """
+    When method put
+    Then status 400
+    And match response.message == 'Product name is required.'

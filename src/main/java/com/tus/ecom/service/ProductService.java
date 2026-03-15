@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,8 @@ public class ProductService {
 
     public ProductResponseDto addProduct(ProductRequestDto request) {
 
+        validateProduct(request);
+
         ProductEntity entity = this.toEntity(request);
 
         return this.toDto(
@@ -34,8 +37,9 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public ProductResponseDto updateProduct(Long id,
-                                            ProductRequestDto request) {
+    public ProductResponseDto updateProduct(Long id, ProductRequestDto request) {
+
+        validateProduct(request);
 
         ProductEntity existing = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -76,6 +80,22 @@ public class ProductService {
                 .toList();
     }
 
+    private void validateProduct(ProductRequestDto request) {
+        if (request.getName() == null || request.getName().isBlank())
+            throw new IllegalArgumentException("Product name is required.");
+
+        if (request.getBrand() == null || request.getBrand().isBlank())
+            throw new IllegalArgumentException("Brand is required.");
+
+        if (request.getCategory() == null || request.getCategory().isBlank())
+            throw new IllegalArgumentException("Category is required.");
+
+        if (request.getPrice() == null || request.getPrice().compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("Price must be a positive value.");
+
+        if (request.getQuantity() == null || request.getQuantity() < 0)
+            throw new IllegalArgumentException("Stock quantity must be a positive value.");
+    }
 
     // Mappers
     public ProductResponseDto toDto(ProductEntity entity) {
