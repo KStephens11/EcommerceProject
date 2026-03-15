@@ -10,5 +10,5 @@ import org.junit.runner.RunWith;
         glue = "com.tus.ecom",
         plugin = {"pretty", "html:target/cucumber-report"}
 )
-public class TestRunner {
+public class TestRunnerIT {
 }

@@ -9,6 +9,15 @@ pipeline {
 
     stages {
 
+        parameters {
+            booleanParam(
+                name: 'RUN_UI_TESTS',
+                defaultValue: false,
+                description: 'Run Selenium UI tests'
+            )
+        }
+
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -18,9 +27,15 @@ pipeline {
         }
 
         stage('Build and Test') {
-            steps {
-                sh 'mvn clean verify'
+          steps {
+            script {
+              if (!params.RUN_UI_TESTS) {
+                bat "mvn -B clean verify -DskipITs=true"
+              } else {
+                bat "mvn -B clean verify -DskipITs=false"
+              }
             }
+          }
         }
 
         stage('SonarQube Analysis') {
