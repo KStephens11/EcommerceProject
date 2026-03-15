@@ -27,8 +27,6 @@ public class BaseSteps {
 
         driver = new ChromeDriver(options);
 
-        //driver = new ChromeDriver();
-        //driver.manage().window().maximize();
     }
 
     @After
