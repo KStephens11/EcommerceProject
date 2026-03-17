@@ -7,14 +7,6 @@ pipeline {
         maven 'maven'
     }
 
-    parameters {
-        booleanParam(
-            name: 'RUN_UI_TESTS',
-            defaultValue: false,
-            description: 'Run Karate/Selenium tests'
-        )
-    }
-
     stages {
 
         stage('Checkout') {
@@ -27,13 +19,7 @@ pipeline {
 
         stage('Build and Test') {
           steps {
-            script {
-              if (!params.RUN_UI_TESTS) {
-                sh "mvn -B clean verify -DskipITs=true"
-              } else {
-                sh "mvn -B clean verify -DskipITs=false"
-              }
-            }
+            sh "mvn -B clean verify -DskipITs=false"
           }
         }
 

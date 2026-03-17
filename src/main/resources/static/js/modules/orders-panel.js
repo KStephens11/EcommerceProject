@@ -56,7 +56,7 @@ export class OrdersPanel {
             const values = [];
 
             data.forEach(item => {
-                labels.push(item.category);
+                labels.push(item.saleType);
                 values.push(Number(item.total).toFixed(2));
             });
 
@@ -119,7 +119,7 @@ export class OrdersPanel {
                 totalRev += Number(item.total);
                 this.brandSales.append(`
                     <div class="list-group-item d-flex justify-content-between">
-                        <span>${item.category}</span>
+                        <span>${item.saleType}</span>
                         <strong>€${Number(item.total).toFixed(2)}</strong>
                     </div>
                 `);

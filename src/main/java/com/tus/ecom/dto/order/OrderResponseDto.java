@@ -13,7 +13,7 @@ public class OrderResponseDto {
 
     public OrderResponseDto() {}
 
-    public OrderResponseDto(Long id, String username, LocalDateTime orderDate, BigDecimal totalAmount, List<OrderItemResponseDto> items, int itemsCount) {
+    public OrderResponseDto(Long id, String username, LocalDateTime orderDate, BigDecimal totalAmount, List<OrderItemResponseDto> items) {
         this.id = id;
         this.username = username;
         this.orderDate = orderDate;

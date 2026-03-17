@@ -23,7 +23,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
+class UserServiceTest {
 
     UserRepository userRepository;
     RoleRepository roleRepository;
@@ -42,7 +42,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUserTestValid() {
+    void createUserTestValid() {
 
         UserRequest userRequest = new UserRequest(1, "Joe", "Password123");
 
@@ -68,7 +68,7 @@ public class UserServiceTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    public void createUserTestNullAndBlankUsername(String username) {
+    void createUserTestNullAndBlankUsername(String username) {
 
         UserRequest request = new UserRequest(1, username, "Password123");
 
@@ -81,7 +81,7 @@ public class UserServiceTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    public void createUserTestNullAndBlankPassword(String password) {
+    void createUserTestNullAndBlankPassword(String password) {
 
         UserRequest request = new UserRequest(1, "Joe", password);
 
@@ -96,7 +96,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUserTestInvalidPasswordLength() {
+    void createUserTestInvalidPasswordLength() {
 
         UserRequest request = new UserRequest(1, "Joe", "123");
 
@@ -112,7 +112,7 @@ public class UserServiceTest {
 
     @ParameterizedTest
     @CsvSource({"password1", "Password"})
-    public void createUserTestInvalidPassword(String password) {
+    void createUserTestInvalidPassword(String password) {
 
         UserRequest request = new UserRequest(1, "Joe", password);
 
@@ -128,7 +128,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUserTestDuplicateUsername() {
+    void createUserTestDuplicateUsername() {
 
         when(userRepository.findByUsername("Joe"))
                 .thenReturn(Optional.of(new UserEntity()));
@@ -142,7 +142,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUsersByIdTest() {
+    void getUsersByIdTest() {
 
         UserEntity user = new UserEntity(
                 1,
@@ -162,7 +162,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUsernames() {
+    void getUsernames() {
 
         UserEntity user1 = new UserEntity(
                 1,

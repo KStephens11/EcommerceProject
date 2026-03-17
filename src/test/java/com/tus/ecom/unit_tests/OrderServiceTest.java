@@ -1,6 +1,6 @@
 package com.tus.ecom.unit_tests;
 
-import com.tus.ecom.dto.CategorySalesDto;
+import com.tus.ecom.dto.SalesDto;
 import com.tus.ecom.dto.order.OrderItemDto;
 import com.tus.ecom.dto.order.OrderResponseDto;
 import com.tus.ecom.model.*;
@@ -20,7 +20,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class OrderServiceTest {
+class OrderServiceTest {
 
     OrderRepository orderRepository;
     ProductRepository productRepository;
@@ -95,8 +95,10 @@ public class OrderServiceTest {
     @Test
     void createOrderTestEmptyItems() {
 
+        List<OrderItemDto> emptyItems = new ArrayList<>();
+
         Exception e = assertThrows(IllegalArgumentException.class,
-                () -> orderService.createOrder("Joe", new ArrayList<>()));
+                () -> orderService.createOrder("Joe", emptyItems));
 
         assertEquals("Order must contain at least one item", e.getMessage());
 
@@ -186,12 +188,31 @@ public class OrderServiceTest {
         when(orderRepository.findSalesByCategory())
                 .thenReturn(List.of(row1, row2));
 
-        List<CategorySalesDto> result = orderService.getSalesByCategory();
+        List<SalesDto> result = orderService.getSalesByCategory();
 
         assertEquals(2, result.size());
-        assertEquals("Electronics", result.get(0).getCategory());
+        assertEquals("Electronics", result.get(0).getSaleType());
         assertEquals(500, result.get(0).getTotal().intValue());
-        assertEquals("Books", result.get(1).getCategory());
+        assertEquals("Books", result.get(1).getSaleType());
         assertEquals(200, result.get(1).getTotal().intValue());
     }
+
+    @Test
+    void getSalesByBrandTest() {
+
+        Object[] row1 = new Object[]{"Apple", BigDecimal.valueOf(800)};
+        Object[] row2 = new Object[]{"Samsung", BigDecimal.valueOf(350)};
+
+        when(orderRepository.findSalesByBrand())
+                .thenReturn(List.of(row1, row2));
+
+        List<SalesDto> result = orderService.getSalesByBrand();
+
+        assertEquals(2, result.size());
+        assertEquals("Apple", result.get(0).getSaleType());
+        assertEquals(800, result.get(0).getTotal().intValue());
+        assertEquals("Samsung", result.get(1).getSaleType());
+        assertEquals(350, result.get(1).getTotal().intValue());
+    }
+
 }

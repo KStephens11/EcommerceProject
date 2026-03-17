@@ -55,10 +55,12 @@ public class DataInitializer implements CommandLineRunner {
         createUserIfMissing(adminUsername, adminPassword, adminRole);
         createUserIfMissing(customerUsername, customerPassword, customerRole);
 
+        final String electronicsCategory = "Electronics";
+
         final List<ProductEntity> products = Arrays.asList(
-                new ProductEntity(null, "Wireless Mouse", "Ergonomic mouse with RGB lighting", "Electronics", "Logitech", "images/mouse.png", new BigDecimal("29.99"), 45),
-                new ProductEntity(null, "Mechanical Keyboard", "RGB mechanical keyboard with blue switches", "Electronics", "Keychron", "images/keyboard.png", new BigDecimal("89.50"), 18),
-                new ProductEntity(null, "4K Monitor 27\"", "Ultra-thin 4K IPS monitor", "Electronics", "Dell", "images/monitor.png", new BigDecimal("249.99"), 12),
+                new ProductEntity(null, "Wireless Mouse", "Ergonomic mouse with RGB lighting", electronicsCategory, "Logitech", "images/mouse.png", new BigDecimal("29.99"), 45),
+                new ProductEntity(null, "Mechanical Keyboard", "RGB mechanical keyboard with blue switches", electronicsCategory, "Keychron", "images/keyboard.png", new BigDecimal("89.50"), 18),
+                new ProductEntity(null, "4K Monitor 27\"", "Ultra-thin 4K IPS monitor", electronicsCategory, "Dell", "images/monitor.png", new BigDecimal("249.99"), 12),
                 new ProductEntity(null, "Noise Cancelling Headphones", "Over-ear wireless ANC headphones", "Audio", "Sony", "images/headphones.png", new BigDecimal("349.00"), 7),
                 new ProductEntity(null, "Coffee Maker", "Automatic drip coffee machine", "Home", "Ninja", "images/coffeemaker.png", new BigDecimal("79.99"), 22)
         );
@@ -82,12 +84,11 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createRoleIfNotExists(String roleName) {
-        roleRepository.findByName(roleName)
-                .orElseGet(() -> {
-                    RoleEntity role = new RoleEntity();
-                    role.setName(roleName);
-                    return roleRepository.save(role);
-                });
+        if (roleRepository.findByName(roleName).isEmpty()) {
+            RoleEntity role = new RoleEntity();
+            role.setName(roleName);
+            roleRepository.save(role);
+        }
     }
 
 }

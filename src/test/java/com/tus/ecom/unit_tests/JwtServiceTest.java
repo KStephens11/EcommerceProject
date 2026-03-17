@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.lang.reflect.Field;
+import java.time.Duration;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class JwtServiceTest {
+class JwtServiceTest {
 
     private JwtService jwtService;
 
@@ -80,8 +82,7 @@ public class JwtServiceTest {
 
         String token = jwtService.generateToken(userDetails);
 
-        // Wait to ensure token expires
-        Thread.sleep(10);
+        await().atMost(Duration.ofMillis(10L));
 
         assertFalse(jwtService.isTokenValid(token, userDetails));
     }

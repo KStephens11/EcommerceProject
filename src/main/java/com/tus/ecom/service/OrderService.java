@@ -1,6 +1,6 @@
 package com.tus.ecom.service;
 
-import com.tus.ecom.dto.CategorySalesDto;
+import com.tus.ecom.dto.SalesDto;
 import com.tus.ecom.dto.order.OrderItemDto;
 import com.tus.ecom.dto.order.OrderItemResponseDto;
 import com.tus.ecom.dto.order.OrderResponseDto;
@@ -101,10 +101,10 @@ public class OrderService {
     }
 
     // Get Sales by Category
-    public List<CategorySalesDto> getSalesByCategory() {
+    public List<SalesDto> getSalesByCategory() {
         return orderRepository.findSalesByCategory()
                 .stream()
-                .map(row -> new CategorySalesDto(
+                .map(row -> new SalesDto(
                         (String) row[0],
                         (BigDecimal) row[1]
                 ))
@@ -112,10 +112,10 @@ public class OrderService {
     }
 
     // Get Sales by Brand
-    public List<CategorySalesDto> getSalesByBrand() {
+    public List<SalesDto> getSalesByBrand() {
         return orderRepository.findSalesByBrand()
                 .stream()
-                .map(row -> new CategorySalesDto(
+                .map(row -> new SalesDto(
                         (String) row[0],
                         (BigDecimal) row[1]
                 ))

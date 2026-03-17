@@ -1,6 +1,6 @@
 package com.tus.ecom.controller;
 
-import com.tus.ecom.dto.CategorySalesDto;
+import com.tus.ecom.dto.SalesDto;
 import com.tus.ecom.dto.order.OrderRequest;
 import com.tus.ecom.dto.order.OrderResponseDto;
 import com.tus.ecom.service.OrderService;
@@ -40,12 +40,12 @@ public class OrderController {
     }
 
     @GetMapping("/stats/sales-by-category")
-    public ResponseEntity<List<CategorySalesDto>> getSalesByCategory() {
+    public ResponseEntity<List<SalesDto>> getSalesByCategory() {
         return ResponseEntity.ok(orderService.getSalesByCategory());
     }
 
     @GetMapping("/stats/sales-by-brand")
-    public ResponseEntity<List<CategorySalesDto>> getSalesByBrand() {
+    public ResponseEntity<List<SalesDto>> getSalesByBrand() {
         return ResponseEntity.ok(orderService.getSalesByBrand());
     }
 
