@@ -33,17 +33,6 @@ public class ProductEntity {
     @Column
     private Integer quantity;
 
-    public ProductEntity(Long id, String name, String description, String category, String brand, String image, BigDecimal price, Integer quantity) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.category = category;
-        this.brand = brand;
-        this.image = image;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
     public ProductEntity(){}
 
     public Long getId() {

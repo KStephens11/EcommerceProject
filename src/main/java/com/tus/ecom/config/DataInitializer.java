@@ -58,11 +58,11 @@ public class DataInitializer implements CommandLineRunner {
         final String electronicsCategory = "Electronics";
 
         final List<ProductEntity> products = Arrays.asList(
-                new ProductEntity(null, "Wireless Mouse", "Ergonomic mouse with RGB lighting", electronicsCategory, "Logitech", "images/mouse.png", new BigDecimal("29.99"), 45),
-                new ProductEntity(null, "Mechanical Keyboard", "RGB mechanical keyboard with blue switches", electronicsCategory, "Keychron", "images/keyboard.png", new BigDecimal("89.50"), 18),
-                new ProductEntity(null, "4K Monitor 27\"", "Ultra-thin 4K IPS monitor", electronicsCategory, "Dell", "images/monitor.png", new BigDecimal("249.99"), 12),
-                new ProductEntity(null, "Noise Cancelling Headphones", "Over-ear wireless ANC headphones", "Audio", "Sony", "images/headphones.png", new BigDecimal("349.00"), 7),
-                new ProductEntity(null, "Coffee Maker", "Automatic drip coffee machine", "Home", "Ninja", "images/coffeemaker.png", new BigDecimal("79.99"), 22)
+                createProduct("Wireless Mouse", "Ergonomic mouse with RGB lighting", electronicsCategory, "Logitech", "images/mouse.png", new BigDecimal("29.99"), 45),
+                createProduct("Mechanical Keyboard", "RGB mechanical keyboard with blue switches", electronicsCategory, "Keychron", "images/keyboard.png", new BigDecimal("89.50"), 18),
+                createProduct("4K Monitor 27\"", "Ultra-thin 4K IPS monitor", electronicsCategory, "Dell", "images/monitor.png", new BigDecimal("249.99"), 12),
+                createProduct("Noise Cancelling Headphones", "Over-ear wireless ANC headphones", "Audio", "Sony", "images/headphones.png", new BigDecimal("349.00"), 7),
+                createProduct("Coffee Maker", "Automatic drip coffee machine", "Home", "Ninja", "images/coffeemaker.png", new BigDecimal("79.99"), 22)
         );
 
         if (productRepository.count() == 0) {
@@ -70,6 +70,18 @@ public class DataInitializer implements CommandLineRunner {
         }
 
 
+    }
+
+    private ProductEntity createProduct(String name, String description, String category, String brand, String image, BigDecimal price, Integer quantity) {
+        ProductEntity p = new ProductEntity();
+        p.setName(name);
+        p.setDescription(description);
+        p.setCategory(category);
+        p.setBrand(brand);
+        p.setImage(image);
+        p.setPrice(price);
+        p.setQuantity(quantity);
+        return p;
     }
 
 

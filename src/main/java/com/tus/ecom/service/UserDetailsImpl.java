@@ -11,9 +11,6 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
-    @Serial
-    private static final long serialVersionUID = 2405172041950251807L;
-
     private final UserEntity user;
 
     public UserDetailsImpl(UserEntity user) {

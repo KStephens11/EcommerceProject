@@ -2,9 +2,11 @@ package com.tus.ecom.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     public UserEntity(Integer id, String username, String password, RoleEntity role) {
         this.id = id;
