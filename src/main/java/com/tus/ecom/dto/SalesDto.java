@@ -19,7 +19,7 @@ public class SalesDto {
         return saleType;
     }
 
-    public void setSaleType(String category) {
+    public void setSaleType(String saleType) {
         this.saleType = saleType;
     }
 
