@@ -33,8 +33,6 @@ public class ProductEntity {
     @Column
     private Integer quantity;
 
-    public ProductEntity(){}
-
     public Long getId() {
         return id;
     }

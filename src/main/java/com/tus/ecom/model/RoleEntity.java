@@ -2,9 +2,11 @@ package com.tus.ecom.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "roles")
-public class RoleEntity {
+public class RoleEntity implements Serializable {
 
     public RoleEntity(Long id, String name) {
         this.id = id;
