@@ -19,5 +19,10 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 """)
     List<Object[]> findSalesByCategory();
 
+    @Query("""
+    SELECT i.productBrand, SUM(i.price * i.quantity)
+    FROM OrderItemEntity i GROUP BY i.productBrand
+""")
+    List<Object[]> findSalesByBrand();
 
 }

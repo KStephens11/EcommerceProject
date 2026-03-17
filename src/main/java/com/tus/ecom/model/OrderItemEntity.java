@@ -25,6 +25,9 @@ public class OrderItemEntity {
     private String productCategory;
 
     @Column(nullable = false)
+    private String productBrand;
+
+    @Column(nullable = false)
     private Integer quantity;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -80,6 +83,14 @@ public class OrderItemEntity {
 
     public void setProductCategory(String productCategory) {
         this.productCategory = productCategory;
+    }
+
+    public String getProductBrand() {
+        return productBrand;
+    }
+
+    public void setProductBrand(String productBrand) {
+        this.productBrand = productBrand;
     }
 
     public Integer getQuantity() {

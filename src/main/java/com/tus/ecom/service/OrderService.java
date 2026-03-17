@@ -71,6 +71,7 @@ public class OrderService {
             item.setProductId(product.getId());
             item.setProductName(product.getName());
             item.setProductCategory(product.getCategory());
+            item.setProductBrand(product.getBrand());
             item.setQuantity(dto.getQuantity());
             item.setPrice(product.getPrice());
 
@@ -110,6 +111,17 @@ public class OrderService {
                 .toList();
     }
 
+    // Get Sales by Brand
+    public List<CategorySalesDto> getSalesByBrand() {
+        return orderRepository.findSalesByBrand()
+                .stream()
+                .map(row -> new CategorySalesDto(
+                        (String) row[0],
+                        (BigDecimal) row[1]
+                ))
+                .toList();
+    }
+
     // Mappers
     private OrderResponseDto mapOrderToDto(OrderEntity order) {
 
@@ -140,6 +152,7 @@ public class OrderService {
         dto.setProductId(item.getProductId());
         dto.setProductName(item.getProductName());
         dto.setProductCategory(item.getProductCategory());
+        dto.setProductBrand(item.getProductBrand());
         dto.setQuantity(item.getQuantity());
         dto.setPrice(item.getPrice());
 

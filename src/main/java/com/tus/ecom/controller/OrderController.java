@@ -43,4 +43,10 @@ public class OrderController {
     public ResponseEntity<List<CategorySalesDto>> getSalesByCategory() {
         return ResponseEntity.ok(orderService.getSalesByCategory());
     }
+
+    @GetMapping("/stats/sales-by-brand")
+    public ResponseEntity<List<CategorySalesDto>> getSalesByBrand() {
+        return ResponseEntity.ok(orderService.getSalesByBrand());
+    }
+
 }

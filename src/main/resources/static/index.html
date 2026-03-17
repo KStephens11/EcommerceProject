@@ -1,321 +1,347 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>Product Catalog</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Catalog</title>
 
-      <!-- Bootstrap Icons -->
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-      <!-- jQuery CDN -->
-      <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="css/bootstrap.min.css" />
-      <link rel="stylesheet" href="css/style.css" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
 
-    </head>
-    <body>
+</head>
+<body>
 
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-      <div class="container-fluid position-relative">
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid position-relative">
 
-        <!-- LEFT -->
-        <div class="d-flex align-items-center gap-2">
+    <!-- LEFT -->
+    <div class="d-flex align-items-center gap-2">
 
-          <!-- Brand -->
-          <button class="navbar-brand btn btn-link p-0" id="homeBtn">
-            Ecommerce Products
-          </button>
+      <!-- Brand -->
+      <button class="navbar-brand btn btn-link p-0" id="homeBtn">
+        Ecommerce Products
+      </button>
 
-          <button class="btn btn-primary" type="submit" id="productManagementBtn" style="display:none;">
-            Product Management
-          </button>
+      <button class="btn btn-primary" type="submit" id="productManagementBtn" style="display:none;">
+        Product Management
+      </button>
 
-          <button class="btn btn-primary" type="submit" id="ordersBtn" style="display:none;">
-            Orders
-          </button>
+      <button class="btn btn-primary" type="submit" id="ordersBtn" style="display:none;">
+        Orders
+      </button>
 
-        </div>
+    </div>
 
-        <!-- CENTER -->
-        <div class="position-absolute start-50 translate-middle-x d-none d-lg-block"
-             style="width: 40%;">
+    <!-- CENTER -->
+    <div class="position-absolute start-50 translate-middle-x d-none d-lg-block"
+         style="width: 40%;">
 
-          <form id="searchForm" class="d-flex">
+      <form id="searchForm" class="d-flex">
 
-            <input id="searchInput"
-                   class="form-control me-2"
-                   type="search"
-                   placeholder="Search">
+        <input id="searchInput"
+               class="form-control me-2"
+               type="search"
+               placeholder="Search">
 
-            <button id="searchButton"
-                    class="btn btn-light"
-                    type="submit">
-              <i class="bi bi-search"></i>
-            </button>
+        <button id="searchButton"
+                class="btn btn-light"
+                type="submit">
+          <i class="bi bi-search"></i>
+        </button>
 
-          </form>
+      </form>
 
-        </div>
+    </div>
 
-        <!-- RIGHT -->
-        <div class="ms-auto d-flex align-items-center gap-3">
+    <!-- RIGHT -->
+    <div class="ms-auto d-flex align-items-center gap-3">
 
-          <button class="btn btn-outline-light position-relative" id="cartBtn">
-            <i class="bi bi-cart"></i>
+      <button class="btn btn-outline-light position-relative" id="cartBtn">
+        <i class="bi bi-cart"></i>
 
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                  id="cartCount">0</span>
-          </button>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              id="cartCount">0</span>
+      </button>
 
-          <span id="usernameDisplay"
-                class="text-white fw-semibold d-none d-md-inline"></span>
+      <span id="usernameDisplay"
+            class="text-white fw-semibold d-none d-md-inline"></span>
 
-          <button class="btn btn-secondary btn-sm" id="logout">
-            Logout
-          </button>
+      <button class="btn btn-secondary btn-sm" id="logout">
+        Logout
+      </button>
 
-        </div>
+    </div>
 
-      </div>
+  </div>
+</nav>
+
+
+<!-- Cart Offcanvas Modal -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="cartOffcanvasLabel">Your Shopping Cart</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div id="cartItems" class="mb-4"></div>
+
+    <div class="d-flex justify-content-between mb-3">
+      <strong>Total:</strong>
+      <strong id="cartTotal">€0.00</strong>
+    </div>
+
+    <div class="d-grid">
+      <button class="btn btn-primary" id="checkoutBtn" disabled>Checkout</button>
+    </div>
+
+  </div>
+</div>
+
+<main class="container mt-4">
+
+  <div id="error" class="alert alert-danger text-center py-4" style="display:none;"></div>
+
+  <!-- Main/Product Section -->
+  <section id="products-section">
+    <div class="row" id="products"></div>
+
+    <!-- Pagination -->
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center" id="pagination"></ul>
     </nav>
 
+  </section>
 
-    <!-- Cart Offcanvas Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="cartOffcanvasLabel">Your Shopping Cart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  <!-- Product Management Section -->
+  <section id="management-section" style="display:none;">
+    <div class="d-flex justify-content-between mb-3">
+      <h4>Product Management</h4>
+      <button class="btn btn-success" id="createProductBtn">
+        <i class="bi bi-plus-lg"></i> Create Product
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead class="table-dark">
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Brand</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody id="managementProductTable">
+        <!-- Inject rows via JS -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Orders Section -->
+  <section id="orders-section" style="display:none;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4>Orders & Statistics</h4>
+      <div class="btn-group">
+        <button class="btn btn-outline-secondary active" id="statsTab">Statistics</button>
+        <button class="btn btn-outline-secondary" id="ordersTab">Orders List</button>
       </div>
-      <div class="offcanvas-body">
-        <div id="cartItems" class="mb-4"></div>
+    </div>
 
-        <div class="d-flex justify-content-between mb-3">
-          <strong>Total:</strong>
-          <strong id="cartTotal">€0.00</strong>
+    <!-- Statistics View -->
+    <div id="statsView">
+
+      <!-- Charts Row -->
+      <div class="row g-4 mb-2">
+        <div class="col-md-7">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Revenue by Category</h5>
+              <canvas id="salesByCategoryChart" height="120"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Revenue Over Time</h5>
+              <canvas id="revenueOverTimeChart" height="160"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Widgets Row -->
+      <div class="row g-4">
+        <!-- Total Revenue Card -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-primary">
+            <div class="card-body text-center">
+              <h5 class="card-title text-primary">Total Revenue</h5>
+              <h3 id="totalRevenue" class="text-success">€0.00</h3>
+            </div>
+          </div>
         </div>
 
-        <div class="d-grid">
-          <button class="btn btn-primary" id="checkoutBtn" disabled>Checkout</button>
+        <!-- Low Stock Alert Card -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-warning">
+            <div class="card-body">
+              <h5 class="card-title text-warning">Low Stock Products</h5>
+              <div id="lowStockList" class="list-group list-group-flush"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales by Brand -->
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Sales by Brand</h5>
+              <div id="brandSales" class="list-group list-group-flush"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Orders List View -->
+    <div id="ordersView" style="display:none;">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Details Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content" style="padding-top: 40px;">
+        <!--        <div class="modal-header">-->
+        <!--          <h5 class="modal-title" id="productModalLabel">Product Details</h5>-->
+        <!--          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+        <!--        </div>-->
+        <div class="modal-body" id="modalBody">
+          <!-- Content will be injected here by JavaScript -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="addToCartBtn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Form Modal -->
+  <div class="modal fade" id="productFormModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="productFormTitle">Create Product</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <input type="hidden" id="productId">
+
+          <div class="mb-3">
+            <label>Name</label>
+            <input class="form-control" id="productName">
+          </div>
+
+          <div class="mb-3">
+            <label>Brand</label>
+            <input class="form-control" id="productBrand">
+          </div>
+
+          <div class="mb-3">
+            <label>Category</label>
+            <input class="form-control" id="productCategory">
+          </div>
+
+          <div class="mb-3">
+            <label>Price</label>
+            <input type="number" step="0.01" class="form-control" id="productPrice">
+          </div>
+
+          <div class="mb-3">
+            <label>Stock</label>
+            <input type="number" class="form-control" id="productStock">
+          </div>
+
+          <div class="mb-3">
+            <label>Product Image</label>
+            <input type="hidden" id="productImage">
+            <input type="file" class="form-control" id="productImageFile" accept="image/*">
+          </div>
+
+          <div id="productFormError" class="alert alert-danger d-none mt-2"></div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" id="saveProductBtn">Save</button>
         </div>
 
       </div>
     </div>
+  </div>
 
-    <main class="container mt-4">
+  <!-- Product Delete Modal -->
+  <div class="modal fade" id="deleteProductModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
 
-      <div id="error" class="alert alert-danger text-center py-4" style="display:none;"></div>
+        <div class="modal-body text-center p-4">
+          <h5>Are you sure you want to delete this product?</h5>
+          <input type="hidden" id="deleteProductId">
 
-      <!-- Main/Product Section -->
-      <section id="products-section">
-        <div class="row" id="products"></div>
-
-        <!-- Pagination -->
-        <nav class="mt-4">
-          <ul class="pagination justify-content-center" id="pagination"></ul>
-        </nav>
-
-      </section>
-
-      <!-- Product Management Section -->
-      <section id="management-section" style="display:none;">
-        <div class="d-flex justify-content-between mb-3">
-          <h4>Product Management</h4>
-          <button class="btn btn-success" id="createProductBtn">
-            <i class="bi bi-plus-lg"></i> Create Product
-          </button>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-striped align-middle">
-            <thead class="table-dark">
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Brand</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th class="text-center">Actions</th>
-            </tr>
-            </thead>
-
-            <tbody id="managementProductTable">
-            <!-- Inject rows via JS -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Orders Section -->
-      <section id="orders-section" style="display:none;">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h4>Orders & Statistics</h4>
-          <div class="btn-group">
-            <button class="btn btn-outline-secondary active" id="statsTab">Statistics</button>
-            <button class="btn btn-outline-secondary" id="ordersTab">Orders List</button>
+          <div class="mt-4">
+            <button class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
           </div>
         </div>
 
-        <!-- Statistics View -->
-        <div id="statsView">
-          <div class="row g-4">
-            <!-- Total Revenue Card -->
-            <div class="col-md-4">
-              <div class="card shadow-sm border-primary">
-                <div class="card-body text-center">
-                  <h5 class="card-title text-primary">Total Revenue</h5>
-                  <h3 id="totalRevenue" class="text-success">€0.00</h3>
-                </div>
-              </div>
-            </div>
-
-            <!-- Low Stock Alert Card -->
-            <div class="col-md-4">
-              <div class="card shadow-sm border-warning">
-                <div class="card-body">
-                  <h5 class="card-title text-warning">Low Stock Products</h5>
-                  <div id="lowStockList" class="list-group list-group-flush"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Sales by Category -->
-            <div class="col-md-4">
-              <div class="card shadow-sm">
-                <div class="card-body">
-                  <h5 class="card-title">Sales by Category</h5>
-                  <div id="categorySales" class="list-group list-group-flush"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Orders List View -->
-        <div id="ordersView" style="display:none;">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead class="table-dark">
-              <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Items</th>
-                <th>Total</th>
-              </tr>
-              </thead>
-              <tbody id="ordersTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- Product Details Modal -->
-      <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content" style="padding-top: 40px;">
-            <!--        <div class="modal-header">-->
-            <!--          <h5 class="modal-title" id="productModalLabel">Product Details</h5>-->
-            <!--          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-            <!--        </div>-->
-            <div class="modal-body" id="modalBody">
-              <!-- Content will be injected here by JavaScript -->
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="addToCartBtn">Add to Cart</button>
-            </div>
-          </div>
-        </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Product Form Modal -->
-      <div class="modal fade" id="productFormModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
+</main>
 
-            <div class="modal-header">
-              <h5 class="modal-title" id="productFormTitle">Create Product</h5>
-              <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
-            <div class="modal-body">
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-              <input type="hidden" id="productId">
+<!-- Custom JS -->
+<script type="module" src="js/app.js"></script>
 
-              <div class="mb-3">
-                <label>Name</label>
-                <input class="form-control" id="productName">
-              </div>
-
-              <div class="mb-3">
-                <label>Brand</label>
-                <input class="form-control" id="productBrand">
-              </div>
-
-              <div class="mb-3">
-                <label>Category</label>
-                <input class="form-control" id="productCategory">
-              </div>
-
-              <div class="mb-3">
-                <label>Price</label>
-                <input type="number" step="0.01" class="form-control" id="productPrice">
-              </div>
-
-              <div class="mb-3">
-                <label>Stock</label>
-                <input type="number" class="form-control" id="productStock">
-              </div>
-
-              <div class="mb-3">
-                <label>Product Image</label>
-                <input type="hidden" id="productImage">
-                <input type="file" class="form-control" id="productImageFile" accept="image/*">
-              </div>
-
-              <div id="productFormError" class="alert alert-danger d-none mt-2"></div>
-
-            </div>
-
-            <div class="modal-footer">
-              <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button class="btn btn-primary" id="saveProductBtn">Save</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Product Delete Modal -->
-      <div class="modal fade" id="deleteProductModal">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-
-            <div class="modal-body text-center p-4">
-              <h5>Are you sure you want to delete this product?</h5>
-              <input type="hidden" id="deleteProductId">
-
-              <div class="mt-4">
-                <button class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </main>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JS -->
-    <script type="module" src="js/app.js"></script>
-
-    </body>
+</body>
 </html>
