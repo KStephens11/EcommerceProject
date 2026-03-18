@@ -57,6 +57,18 @@ public class OrderService {
         // Create Entities from DTOs in
         for (OrderItemDto dto : items) {
 
+            if (dto.getProductId() == null) {
+                throw new IllegalArgumentException("Product ID is required");
+            }
+
+            if (dto.getQuantity() == null) {
+                throw new IllegalArgumentException("Quantity is required");
+            }
+
+            if (dto.getQuantity() <= 0) {
+                throw new IllegalArgumentException("Quantity must be greater than 0");
+            }
+
             ProductEntity product = productRepository.findById(dto.getProductId())
                     .orElseThrow(() ->
                             new IllegalArgumentException("Product not found: " + dto.getProductId()));
@@ -72,7 +84,9 @@ public class OrderService {
             item.setProductName(product.getName());
             item.setProductCategory(product.getCategory());
             item.setProductBrand(product.getBrand());
+            //save ordered quantity
             item.setQuantity(dto.getQuantity());
+
             item.setPrice(product.getPrice());
 
             order.getItems().add(item);

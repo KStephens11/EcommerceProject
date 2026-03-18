@@ -42,7 +42,7 @@ public class ProductService {
         validateProduct(request);
 
         ProductEntity existing = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         existing.setName(request.getName());
         existing.setDescription(request.getDescription());
