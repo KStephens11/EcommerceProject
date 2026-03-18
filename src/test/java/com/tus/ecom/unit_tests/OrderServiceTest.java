@@ -215,4 +215,81 @@ class OrderServiceTest {
         assertEquals(350, result.get(1).getTotal().intValue());
     }
 
+    @Test
+    void createOrder_nullProductId_throwsException() {
+        when(userRepository.findByUsername("Joe"))
+                .thenReturn(Optional.of(new UserEntity()));
+
+        OrderItemDto dto = new OrderItemDto();
+        dto.setProductId(null);
+        dto.setQuantity(1);
+
+        List<OrderItemDto> items = List.of(dto);
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> orderService.createOrder("Joe", items)
+        );
+
+        assertEquals("Product ID is required", ex.getMessage());
+        verify(productRepository, never()).save(any());
+        verify(orderRepository, never()).save(any());
+    }
+
+    @Test
+    void createOrder_nullQuantity_throwsException() {
+        when(userRepository.findByUsername("Joe"))
+                .thenReturn(Optional.of(new UserEntity()));
+
+        OrderItemDto dto = new OrderItemDto();
+        dto.setProductId(1L);
+        dto.setQuantity(null);  // intentionally null
+
+        List<OrderItemDto> items = List.of(dto);
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> orderService.createOrder("Joe", items)
+        );
+
+        assertEquals("Quantity is required", ex.getMessage());
+        verify(productRepository, never()).save(any());
+        verify(orderRepository, never()).save(any());
+    }
+
+    @Test
+    void createOrder_negativeOrZeroQuantity_throwsException() {
+        when(userRepository.findByUsername("Joe"))
+                .thenReturn(Optional.of(new UserEntity()));
+
+        // Quantity = 0
+        OrderItemDto dtoZero = new OrderItemDto();
+        dtoZero.setProductId(1L);
+        dtoZero.setQuantity(0);
+
+        List<OrderItemDto> itemsZero = List.of(dtoZero);
+
+        IllegalArgumentException exZero = assertThrows(
+                IllegalArgumentException.class,
+                () -> orderService.createOrder("Joe", itemsZero)
+        );
+        assertEquals("Quantity must be greater than 0", exZero.getMessage());
+
+        // Quantity = negative
+        OrderItemDto dtoNegative = new OrderItemDto();
+        dtoNegative.setProductId(1L);
+        dtoNegative.setQuantity(-5);
+
+        List<OrderItemDto> itemsNegative = List.of(dtoNegative);
+
+        IllegalArgumentException exNegative = assertThrows(
+                IllegalArgumentException.class,
+                () -> orderService.createOrder("Joe", itemsNegative)
+        );
+        assertEquals("Quantity must be greater than 0", exNegative.getMessage());
+
+        verify(productRepository, never()).save(any());
+        verify(orderRepository, never()).save(any());
+    }
+
 }
