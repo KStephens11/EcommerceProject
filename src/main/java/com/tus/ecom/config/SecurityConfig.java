@@ -2,6 +2,7 @@ package com.tus.ecom.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -46,6 +47,7 @@ public class SecurityConfig {
                                 "/api/users/register"
                         ).permitAll()
                         .requestMatchers("/api/products", "/api/products/name").hasAnyRole("CUSTOMER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers("/api/orders/**", "/api/products/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
