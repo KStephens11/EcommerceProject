@@ -44,7 +44,7 @@ class UserServiceTest {
     @Test
     void createUserTestValid() {
 
-        UserRequest userRequest = new UserRequest(1, "Joe", "Password123");
+        UserRequest userRequest = new UserRequest("Joe", "Password123");
 
         when(userRepository.findByUsername("Joe")).thenReturn(Optional.empty());
         when(roleRepository.findByName("CUSTOMER"))
@@ -70,7 +70,7 @@ class UserServiceTest {
     @NullAndEmptySource
     void createUserTestNullAndBlankUsername(String username) {
 
-        UserRequest request = new UserRequest(1, username, "Password123");
+        UserRequest request = new UserRequest(username, "Password123");
 
         assertThrows(IllegalArgumentException.class,
                 () -> userService.createUser(request),
@@ -83,7 +83,7 @@ class UserServiceTest {
     @NullAndEmptySource
     void createUserTestNullAndBlankPassword(String password) {
 
-        UserRequest request = new UserRequest(1, "Joe", password);
+        UserRequest request = new UserRequest("Joe", password);
 
         when(userRepository.findByUsername("Joe")).thenReturn(Optional.empty());
 
@@ -98,7 +98,7 @@ class UserServiceTest {
     @Test
     void createUserTestInvalidPasswordLength() {
 
-        UserRequest request = new UserRequest(1, "Joe", "123");
+        UserRequest request = new UserRequest("Joe", "123");
 
         when(userRepository.findByUsername("Joe")).thenReturn(Optional.empty());
 
@@ -114,7 +114,7 @@ class UserServiceTest {
     @CsvSource({"password1", "Password"})
     void createUserTestInvalidPassword(String password) {
 
-        UserRequest request = new UserRequest(1, "Joe", password);
+        UserRequest request = new UserRequest("Joe", password);
 
         when(userRepository.findByUsername("Joe")).thenReturn(Optional.empty());
 
@@ -133,7 +133,7 @@ class UserServiceTest {
         when(userRepository.findByUsername("Joe"))
                 .thenReturn(Optional.of(new UserEntity()));
 
-        UserRequest request = new UserRequest(1, "Joe", "Password123");
+        UserRequest request = new UserRequest("Joe", "Password123");
 
         Exception e = assertThrows(IllegalArgumentException.class,
                 () -> userService.createUser(request));
