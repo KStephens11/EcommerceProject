@@ -249,4 +249,81 @@ class ProductServiceTest {
         verify(productRepository, never()).save(any());
     }
 
+    @Test
+    void updateProduct_success() {
+        // Input DTO
+        ProductRequestDto request = new ProductRequestDto();
+        request.setName("Laptop Pro");
+        request.setBrand("Apple");
+        request.setCategory("Electronics");
+        request.setPrice(BigDecimal.valueOf(1500));
+        request.setQuantity(5);
+
+        ProductEntity existingProduct = new ProductEntity();
+        existingProduct.setId(1L);
+        existingProduct.setName("Laptop");
+        existingProduct.setBrand("Apple");
+        existingProduct.setCategory("Electronics");
+        existingProduct.setPrice(BigDecimal.valueOf(1000));
+        existingProduct.setQuantity(10);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
+
+        ProductEntity savedProduct = new ProductEntity();
+        savedProduct.setId(1L);
+        savedProduct.setName(request.getName());
+        savedProduct.setBrand(request.getBrand());
+        savedProduct.setCategory(request.getCategory());
+        savedProduct.setPrice(request.getPrice());
+        savedProduct.setQuantity(request.getQuantity());
+
+        when(productRepository.save(any(ProductEntity.class))).thenReturn(savedProduct);
+
+        ProductResponseDto result = productService.updateProduct(1L, request);
+
+        assertNotNull(result);
+        assertEquals("Laptop Pro", result.getName());
+        assertEquals("Apple", result.getBrand());
+        assertEquals("Electronics", result.getCategory());
+        assertEquals(BigDecimal.valueOf(1500), result.getPrice());
+        assertEquals(5, result.getQuantity());
+
+        verify(productRepository, times(1)).findById(1L);
+        verify(productRepository, times(1)).save(any(ProductEntity.class));
+    }
+
+    @Test
+    void getLowStockProducts_returnsFilteredProducts() {
+        int threshold = 5;
+
+        ProductEntity p1 = new ProductEntity();
+        p1.setId(1L);
+        p1.setName("Mouse");
+        p1.setQuantity(2);
+
+        ProductEntity p2 = new ProductEntity();
+        p2.setId(2L);
+        p2.setName("Keyboard");
+        p2.setQuantity(5);
+
+        List<ProductEntity> lowStockProducts = List.of(p1, p2);
+
+        when(productRepository.findByQuantityLessThanEqualOrderByQuantityAsc(threshold))
+                .thenReturn(lowStockProducts);
+
+        List<ProductResponseDto> result = productService.getLowStockProducts(threshold);
+
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        assertEquals("Mouse", result.get(0).getName());
+        assertEquals(2, result.get(0).getQuantity());
+        assertEquals("Keyboard", result.get(1).getName());
+        assertEquals(5, result.get(1).getQuantity());
+
+        verify(productRepository, times(1))
+                .findByQuantityLessThanEqualOrderByQuantityAsc(threshold);
+    }
+
 }

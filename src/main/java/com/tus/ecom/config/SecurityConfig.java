@@ -27,6 +27,9 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    private static final String ADMIN_ROLE = "ADMIN";
+    private static final String CUSTOMER_ROLE = "CUSTOMER";
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 
@@ -46,9 +49,9 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/users/register"
                         ).permitAll()
-                        .requestMatchers("/api/products", "/api/products/name").hasAnyRole("CUSTOMER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyRole("CUSTOMER", "ADMIN")
-                        .requestMatchers("/api/orders/**", "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/products", "/api/products/name").hasAnyRole(CUSTOMER_ROLE, ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyRole(CUSTOMER_ROLE, ADMIN_ROLE)
+                        .requestMatchers("/api/orders/**", "/api/products/**").hasRole(ADMIN_ROLE)
                         .anyRequest().authenticated()
                 )
                 // Redirect unauthorized users to login page
