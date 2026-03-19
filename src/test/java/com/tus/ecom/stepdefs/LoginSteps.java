@@ -43,8 +43,8 @@ public class LoginSteps {
     @Then("user should see homepage")
     public void verify_homepage() {
         WebDriverWait wait = new WebDriverWait(base.driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlToBe("http://localhost:8080/"));
-        assertEquals("http://localhost:8080/", base.driver.getCurrentUrl());
+        wait.until(ExpectedConditions.urlToBe(base.baseUrl()));
+        assertEquals(base.baseUrl(), base.driver.getCurrentUrl());
     }
 
     @Then("the page should contain {string}")
