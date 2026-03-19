@@ -25,7 +25,7 @@ public class LoginSteps {
 
     @Given("user is on login page")
     public void user_on_login_page() {
-        base.driver.get("http://localhost:8080/login");
+        base.driver.get(base.baseUrl() + "/login");
         loginPage = new LoginPage(base.driver);
     }
 

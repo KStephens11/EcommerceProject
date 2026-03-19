@@ -20,7 +20,7 @@ public class BaseSteps {
 
     WebDriver driver;
 
-    private String baseUrl() {
+    public String baseUrl() {
         return "http://localhost:" + port;
     }
 

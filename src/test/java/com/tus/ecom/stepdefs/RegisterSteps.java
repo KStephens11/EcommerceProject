@@ -23,7 +23,7 @@ public class RegisterSteps {
 
     @Given("user is on register page")
     public void user_on_register_page() {
-        base.driver.get("http://localhost:8080/register");
+        base.driver.get(base.baseUrl() + "/register");
         registerPage = new RegisterPage(base.driver);
     }
 
