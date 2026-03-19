@@ -159,20 +159,21 @@ src/
 
 | Method | Endpoint | Access |
 |--------|----------|--------|
-| POST | `/api/auth/login` | Public |
-| POST | `/api/auth/logout` | Public |
-| POST | `/api/users/register` | Public |
-| GET | `/api/users/me` | Authenticated |
-| GET | `/api/products` | Customer, Admin |
-| GET | `/api/products/name` | Customer, Admin |
-| GET | `/api/products/low-stock` | Admin |
-| POST | `/api/products` | Admin |
-| PUT | `/api/products/{id}` | Admin |
+| POST   | `/api/auth/login` | Public |
+| POST   | `/api/auth/logout` | Public |
+| POST   | `/api/users/register` | Public |
+| GET    | `/api/users/me` | Authenticated |
+| GET    | `/api/products` | Customer, Admin |
+| GET    | `/api/products/name` | Customer, Admin |
+| GET    | `/api/products/low-stock` | Admin |
+| POST   | `/api/products` | Admin |
+| GET    | `/api/products/{id}` | Admin |
+| PUT    | `/api/products/{id}` | Admin |
 | DELETE | `/api/products/{id}` | Admin |
-| POST | `/api/products/upload-image` | Admin |
-| GET | `/api/orders` | Admin |
-| POST | `/api/orders` | Customer |
-| GET | `/api/orders/stats/sales-by-category` | Admin |
+| POST   | `/api/products/upload-image` | Admin |
+| GET    | `/api/orders` | Admin |
+| POST   | `/api/orders` | Customer |
+| GET    | `/api/orders/stats/sales-by-category` | Admin |
 
 ---
 
