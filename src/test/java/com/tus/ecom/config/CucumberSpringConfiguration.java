@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 @CucumberContextConfiguration
 @SpringBootTest(
         classes = EcommerceApplication.class,
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles("test")
 public class CucumberSpringConfiguration {

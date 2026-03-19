@@ -9,16 +9,23 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 
 public class BaseSteps {
 
+    @Value("${local.server.port}")
+    private int port;
+
     WebDriver driver;
+
+    private String baseUrl() {
+        return "http://localhost:" + port;
+    }
 
     @Before
     public void setUp() {
-
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
@@ -26,7 +33,6 @@ public class BaseSteps {
         options.addArguments("--window-size=1920,1080");
 
         driver = new ChromeDriver(options);
-
     }
 
     @After
@@ -38,15 +44,14 @@ public class BaseSteps {
 
     @Given("user is logged in as {string} with password {string}")
     public void user_is_logged_in(String username, String password) {
-        driver.get("http://localhost:8080/login");
+        driver.get(baseUrl() + "/login");
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.enterUsername(username);
         loginPage.enterPassword(password);
         loginPage.clickLogin();
 
-        // Wait until redirected to homepage
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlToBe("http://localhost:8080/"));
+        wait.until(ExpectedConditions.urlToBe(baseUrl() + "/"));
     }
 }
